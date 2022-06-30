@@ -2987,6 +2987,58 @@ components:
             required:
                 - headline
             type: object
+        MessageBoardSuspiciousActivity:
+            description:
+                Represents a report of a suspicious activity in a Thread or Message.
+            properties:
+                actions:
+                    additionalProperties:
+                        additionalProperties:
+                            type: string
+                        type: object
+                createDate:
+                    description:
+                        The date the suspicious activity was created.
+                    format: date-time
+                    readOnly: true
+                    type: string
+                modifiedDate:
+                    description:
+                        The last time any field of the suspicious activity changed.
+                    format: date-time
+                    readOnly: true
+                    type: string
+                messageId:
+                    description:
+                        The ID of the Message Board Message reported.
+                    format: int64
+                    type: integer
+                suspiciousActivityId:
+                    description:
+                        The ID of the Suspicious Activity reported.
+                    format: int64
+                    type: integer
+                threadId:
+                    description:
+                        The ID of the Message Board Message reported.
+                    format: int64
+                    type: integer
+                type:
+                    description:
+                        The type of report.
+                    type: string
+                userId:
+                    description:
+                        The ID of the user reported the message.
+                    format: int64
+                    type: integer
+                validated:
+                    description:
+                        A flag that indicates if the report was accepted.
+                    type: boolean
+            required:
+                - headline
+            type: object
         NavigationMenu:
             # @review
             description:
