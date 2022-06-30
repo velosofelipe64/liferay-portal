@@ -32,6 +32,7 @@ import com.liferay.headless.delivery.resource.v1_0.LanguageResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardAttachmentResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardMessageResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardSectionResource;
+import com.liferay.headless.delivery.resource.v1_0.MessageBoardSuspiciousActivityResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardThreadResource;
 import com.liferay.headless.delivery.resource.v1_0.NavigationMenuResource;
 import com.liferay.headless.delivery.resource.v1_0.SitePageResource;
@@ -132,6 +133,8 @@ public class ServletDataImpl implements ServletData {
 			_messageBoardMessageResourceComponentServiceObjects);
 		Query.setMessageBoardSectionResourceComponentServiceObjects(
 			_messageBoardSectionResourceComponentServiceObjects);
+		Query.setMessageBoardSuspiciousActivityResourceComponentServiceObjects(
+			_messageBoardSuspiciousActivityResourceComponentServiceObjects);
 		Query.setMessageBoardThreadResourceComponentServiceObjects(
 			_messageBoardThreadResourceComponentServiceObjects);
 		Query.setNavigationMenuResourceComponentServiceObjects(
@@ -256,6 +259,10 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<LanguageResource>
 		_languageResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<MessageBoardSuspiciousActivityResource>
+		_messageBoardSuspiciousActivityResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<SitePageResource>

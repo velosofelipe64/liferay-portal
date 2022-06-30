@@ -30,6 +30,7 @@ import com.liferay.headless.delivery.dto.v1_0.Language;
 import com.liferay.headless.delivery.dto.v1_0.MessageBoardAttachment;
 import com.liferay.headless.delivery.dto.v1_0.MessageBoardMessage;
 import com.liferay.headless.delivery.dto.v1_0.MessageBoardSection;
+import com.liferay.headless.delivery.dto.v1_0.MessageBoardSuspiciousActivity;
 import com.liferay.headless.delivery.dto.v1_0.MessageBoardThread;
 import com.liferay.headless.delivery.dto.v1_0.NavigationMenu;
 import com.liferay.headless.delivery.dto.v1_0.NavigationMenuItem;
@@ -56,6 +57,7 @@ import com.liferay.headless.delivery.resource.v1_0.LanguageResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardAttachmentResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardMessageResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardSectionResource;
+import com.liferay.headless.delivery.resource.v1_0.MessageBoardSuspiciousActivityResource;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardThreadResource;
 import com.liferay.headless.delivery.resource.v1_0.NavigationMenuResource;
 import com.liferay.headless.delivery.resource.v1_0.SitePageResource;
@@ -229,6 +231,15 @@ public class Query {
 
 		_messageBoardSectionResourceComponentServiceObjects =
 			messageBoardSectionResourceComponentServiceObjects;
+	}
+
+	public static void
+		setMessageBoardSuspiciousActivityResourceComponentServiceObjects(
+			ComponentServiceObjects<MessageBoardSuspiciousActivityResource>
+				messageBoardSuspiciousActivityResourceComponentServiceObjects) {
+
+		_messageBoardSuspiciousActivityResourceComponentServiceObjects =
+			messageBoardSuspiciousActivityResourceComponentServiceObjects;
 	}
 
 	public static void setMessageBoardThreadResourceComponentServiceObjects(
@@ -2381,6 +2392,45 @@ public class Query {
 				messageBoardSectionResource.
 					getSiteMessageBoardSectionPermissionsPage(
 						Long.valueOf(siteKey), roleNames)));
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {messageBoardThreadMessageBoardSuspiciousActivity(aggregation: ___, filter: ___, messageBoardThreadId: ___, page: ___, pageSize: ___, search: ___, sorts: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 */
+	@GraphQLField(
+		description = "Retrieves the message board thread's messages. Results can be paginated, filtered, searched, and sorted."
+	)
+	public MessageBoardSuspiciousActivityPage
+			messageBoardThreadMessageBoardSuspiciousActivity(
+				@GraphQLName("messageBoardThreadId") Long messageBoardThreadId,
+				@GraphQLName("search") String search,
+				@GraphQLName("aggregation") List<String> aggregations,
+				@GraphQLName("filter") String filterString,
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page,
+				@GraphQLName("sort") String sortsString)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_messageBoardSuspiciousActivityResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			messageBoardSuspiciousActivityResource ->
+				new MessageBoardSuspiciousActivityPage(
+					messageBoardSuspiciousActivityResource.
+						getMessageBoardThreadMessageBoardSuspiciousActivityPage(
+							messageBoardThreadId, search,
+							_aggregationBiFunction.apply(
+								messageBoardSuspiciousActivityResource,
+								aggregations),
+							_filterBiFunction.apply(
+								messageBoardSuspiciousActivityResource,
+								filterString),
+							Pagination.of(page, pageSize),
+							_sortsBiFunction.apply(
+								messageBoardSuspiciousActivityResource,
+								sortsString))));
 	}
 
 	/**
@@ -4582,6 +4632,53 @@ public class Query {
 
 	}
 
+	@GraphQLTypeExtension(MessageBoardThread.class)
+	public class
+		GetMessageBoardThreadMessageBoardSuspiciousActivityPageTypeExtension {
+
+		public GetMessageBoardThreadMessageBoardSuspiciousActivityPageTypeExtension(
+			MessageBoardThread messageBoardThread) {
+
+			_messageBoardThread = messageBoardThread;
+		}
+
+		@GraphQLField(
+			description = "Retrieves the message board thread's messages. Results can be paginated, filtered, searched, and sorted."
+		)
+		public MessageBoardSuspiciousActivityPage
+				messageBoardSuspiciousActivity(
+					@GraphQLName("search") String search,
+					@GraphQLName("aggregation") List<String> aggregations,
+					@GraphQLName("filter") String filterString,
+					@GraphQLName("pageSize") int pageSize,
+					@GraphQLName("page") int page,
+					@GraphQLName("sort") String sortsString)
+			throws Exception {
+
+			return _applyComponentServiceObjects(
+				_messageBoardSuspiciousActivityResourceComponentServiceObjects,
+				Query.this::_populateResourceContext,
+				messageBoardSuspiciousActivityResource ->
+					new MessageBoardSuspiciousActivityPage(
+						messageBoardSuspiciousActivityResource.
+							getMessageBoardThreadMessageBoardSuspiciousActivityPage(
+								_messageBoardThread.getId(), search,
+								_aggregationBiFunction.apply(
+									messageBoardSuspiciousActivityResource,
+									aggregations),
+								_filterBiFunction.apply(
+									messageBoardSuspiciousActivityResource,
+									filterString),
+								Pagination.of(page, pageSize),
+								_sortsBiFunction.apply(
+									messageBoardSuspiciousActivityResource,
+									sortsString))));
+		}
+
+		private MessageBoardThread _messageBoardThread;
+
+	}
+
 	@GraphQLTypeExtension(WikiPage.class)
 	public class GetWikiPageWikiPagesPageTypeExtension {
 
@@ -5772,6 +5869,46 @@ public class Query {
 
 	}
 
+	@GraphQLName("MessageBoardSuspiciousActivityPage")
+	public class MessageBoardSuspiciousActivityPage {
+
+		public MessageBoardSuspiciousActivityPage(
+			Page messageBoardSuspiciousActivityPage) {
+
+			actions = messageBoardSuspiciousActivityPage.getActions();
+
+			facets = messageBoardSuspiciousActivityPage.getFacets();
+
+			items = messageBoardSuspiciousActivityPage.getItems();
+			lastPage = messageBoardSuspiciousActivityPage.getLastPage();
+			page = messageBoardSuspiciousActivityPage.getPage();
+			pageSize = messageBoardSuspiciousActivityPage.getPageSize();
+			totalCount = messageBoardSuspiciousActivityPage.getTotalCount();
+		}
+
+		@GraphQLField
+		protected Map<String, Map> actions;
+
+		@GraphQLField
+		protected List<Facet> facets;
+
+		@GraphQLField
+		protected java.util.Collection<MessageBoardSuspiciousActivity> items;
+
+		@GraphQLField
+		protected long lastPage;
+
+		@GraphQLField
+		protected long page;
+
+		@GraphQLField
+		protected long pageSize;
+
+		@GraphQLField
+		protected long totalCount;
+
+	}
+
 	@GraphQLName("MessageBoardThreadPage")
 	public class MessageBoardThreadPage {
 
@@ -6569,6 +6706,26 @@ public class Query {
 	}
 
 	private void _populateResourceContext(
+			MessageBoardSuspiciousActivityResource
+				messageBoardSuspiciousActivityResource)
+		throws Exception {
+
+		messageBoardSuspiciousActivityResource.setContextAcceptLanguage(
+			_acceptLanguage);
+		messageBoardSuspiciousActivityResource.setContextCompany(_company);
+		messageBoardSuspiciousActivityResource.setContextHttpServletRequest(
+			_httpServletRequest);
+		messageBoardSuspiciousActivityResource.setContextHttpServletResponse(
+			_httpServletResponse);
+		messageBoardSuspiciousActivityResource.setContextUriInfo(_uriInfo);
+		messageBoardSuspiciousActivityResource.setContextUser(_user);
+		messageBoardSuspiciousActivityResource.setGroupLocalService(
+			_groupLocalService);
+		messageBoardSuspiciousActivityResource.setRoleLocalService(
+			_roleLocalService);
+	}
+
+	private void _populateResourceContext(
 			MessageBoardThreadResource messageBoardThreadResource)
 		throws Exception {
 
@@ -6721,6 +6878,9 @@ public class Query {
 		_messageBoardMessageResourceComponentServiceObjects;
 	private static ComponentServiceObjects<MessageBoardSectionResource>
 		_messageBoardSectionResourceComponentServiceObjects;
+	private static ComponentServiceObjects
+		<MessageBoardSuspiciousActivityResource>
+			_messageBoardSuspiciousActivityResourceComponentServiceObjects;
 	private static ComponentServiceObjects<MessageBoardThreadResource>
 		_messageBoardThreadResourceComponentServiceObjects;
 	private static ComponentServiceObjects<NavigationMenuResource>
