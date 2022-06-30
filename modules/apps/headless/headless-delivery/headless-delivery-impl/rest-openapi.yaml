@@ -14212,54 +14212,55 @@ paths:
                             schema:
                                 $ref: "#/components/schemas/WikiPageAttachment"
             tags: ["WikiPageAttachment"]
-"/message-board-threads/{messageBoardThreadId}/message-board-suspicious-activity":
-    get:
-        description:
-            Retrieves the message board thread's messages. Results can be paginated, filtered, searched, and sorted.
-        parameters:
-            - in: path
-              name: messageBoardThreadId
-              required: true
-              schema:
-                  format: int64
-                  type: integer
-            - in: query
-              name: aggregationTerms
-              schema:
-                  items:
+    "/message-board-threads/{messageBoardThreadId}/message-board-suspicious-activity":
+        get:
+            description:
+                Retrieves the message board thread's messages. Results can be paginated, filtered, searched, and sorted.
+            operationId: getMessageBoardThreadMessageBoardSuspiciousActivityPage
+            parameters:
+                - in: path
+                  name: messageBoardThreadId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+                - in: query
+                  name: aggregationTerms
+                  schema:
+                      items:
+                          type: string
+                      type: array
+                - in: query
+                  name: filter
+                  schema:
                       type: string
-                  type: array
-            - in: query
-              name: filter
-              schema:
-                  type: string
-            - in: query
-              name: page
-              schema:
-                  type: integer
-            - in: query
-              name: pageSize
-              schema:
-                  type: integer
-            - in: query
-              name: search
-              schema:
-                  type: string
-            - in: query
-              name: sort
-              schema:
-                  type: string
-        responses:
-            200:
-                content:
-                    application/json:
-                        schema:
-                            items:
-                                $ref: "#/components/schemas/MessageBoardSuspiciousActivity"
-                            type: array
-                    application/xml:
-                        schema:
-                            items:
-                                $ref: "#/components/schemas/MessageBoardSuspiciousActivity"
-                            type: array
-        tags: [ "MessageBoardSuspiciousActivity" ]
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                - in: query
+                  name: pageSize
+                  schema:
+                      type: integer
+                - in: query
+                  name: search
+                  schema:
+                      type: string
+                - in: query
+                  name: sort
+                  schema:
+                      type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/MessageBoardSuspiciousActivity"
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/MessageBoardSuspiciousActivity"
+                                type: array
+            tags: [ "MessageBoardSuspiciousActivity" ]
