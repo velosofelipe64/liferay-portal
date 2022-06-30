@@ -2996,6 +2996,10 @@ components:
                         additionalProperties:
                             type: string
                         type: object
+                    description:
+                        Block of actions allowed by the user making the request.
+                    readOnly: true
+                    type: object
                 createDate:
                     description:
                         The date the suspicious activity was created.
@@ -3037,7 +3041,7 @@ components:
                         A flag that indicates if the report was accepted.
                     type: boolean
             required:
-                - headline
+                - type
             type: object
         NavigationMenu:
             # @review
@@ -5141,7 +5145,7 @@ components:
 info:
     description:
         "A Java client JAR is available for use with the group ID 'com.liferay', artifact ID
-        'com.liferay.headless.delivery.client', and version '4.0.29'."
+        'com.liferay.headless.delivery.client', and version '4.0.30'."
     license:
         name: "Apache 2.0"
         url: "http://www.apache.org/licenses/LICENSE-2.0.html"
