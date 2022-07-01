@@ -61,7 +61,17 @@ public class MessageBoardSuspiciousActivityResourceImpl
 
 	}
 
+	public Page<MessageBoardSuspiciousActivity> getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+		Map<String, Map<String, String>> actions,
+		Long messageBoardMessageId, Long siteId, Boolean flatten,
+		String keywords, Aggregation aggregation,Filter filter,
+		Pagination pagination, Sort[] sorts
+	)
+		throws Exception{
+			List<MBSuspiciousActivity> dados = _mbSuspiciousActivityService.getMessageSuspiciousActivities(messageBoardMessageId);
+			return Page.of(transform(dados, null));
 
+	}
 
 
 	@Reference

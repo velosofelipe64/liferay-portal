@@ -65,6 +65,13 @@ public interface MessageBoardSuspiciousActivityResource {
 				Filter filter, Pagination pagination, Sort[] sorts)
 		throws Exception;
 
+	public Page<MessageBoardSuspiciousActivity>
+			getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+				Long messageBoardMessageId, String search,
+				com.liferay.portal.vulcan.aggregation.Aggregation aggregation,
+				Filter filter, Pagination pagination, Sort[] sorts)
+		throws Exception;
+
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}

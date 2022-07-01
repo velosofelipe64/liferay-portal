@@ -638,6 +638,435 @@ public abstract class BaseMessageBoardSuspiciousActivityResourceTestCase {
 		return null;
 	}
 
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPage()
+		throws Exception {
+
+		Long messageBoardMessageId =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getMessageBoardMessageId();
+		Long irrelevantMessageBoardMessageId =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getIrrelevantMessageBoardMessageId();
+
+		Page<MessageBoardSuspiciousActivity> page =
+			messageBoardSuspiciousActivityResource.
+				getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+					messageBoardMessageId, null, null, null,
+					Pagination.of(1, 10), null);
+
+		Assert.assertEquals(0, page.getTotalCount());
+
+		if (irrelevantMessageBoardMessageId != null) {
+			MessageBoardSuspiciousActivity
+				irrelevantMessageBoardSuspiciousActivity =
+					testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+						irrelevantMessageBoardMessageId,
+						randomIrrelevantMessageBoardSuspiciousActivity());
+
+			page =
+				messageBoardSuspiciousActivityResource.
+					getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+						irrelevantMessageBoardMessageId, null, null, null,
+						Pagination.of(1, 2), null);
+
+			Assert.assertEquals(1, page.getTotalCount());
+
+			assertEquals(
+				Arrays.asList(irrelevantMessageBoardSuspiciousActivity),
+				(List<MessageBoardSuspiciousActivity>)page.getItems());
+			assertValid(page);
+		}
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity1 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity2 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		page =
+			messageBoardSuspiciousActivityResource.
+				getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+					messageBoardMessageId, null, null, null,
+					Pagination.of(1, 10), null);
+
+		Assert.assertEquals(2, page.getTotalCount());
+
+		assertEqualsIgnoringOrder(
+			Arrays.asList(
+				messageBoardSuspiciousActivity1,
+				messageBoardSuspiciousActivity2),
+			(List<MessageBoardSuspiciousActivity>)page.getItems());
+		assertValid(page);
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithFilterDateTimeEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.DATE_TIME);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long messageBoardMessageId =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getMessageBoardMessageId();
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity1 =
+			randomMessageBoardSuspiciousActivity();
+
+		messageBoardSuspiciousActivity1 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, messageBoardSuspiciousActivity1);
+
+		for (EntityField entityField : entityFields) {
+			Page<MessageBoardSuspiciousActivity> page =
+				messageBoardSuspiciousActivityResource.
+					getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+						messageBoardMessageId, null, null,
+						getFilterString(
+							entityField, "between",
+							messageBoardSuspiciousActivity1),
+						Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(messageBoardSuspiciousActivity1),
+				(List<MessageBoardSuspiciousActivity>)page.getItems());
+		}
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithFilterDoubleEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.DOUBLE);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long messageBoardMessageId =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getMessageBoardMessageId();
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity1 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity2 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		for (EntityField entityField : entityFields) {
+			Page<MessageBoardSuspiciousActivity> page =
+				messageBoardSuspiciousActivityResource.
+					getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+						messageBoardMessageId, null, null,
+						getFilterString(
+							entityField, "eq", messageBoardSuspiciousActivity1),
+						Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(messageBoardSuspiciousActivity1),
+				(List<MessageBoardSuspiciousActivity>)page.getItems());
+		}
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithFilterStringEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.STRING);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long messageBoardMessageId =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getMessageBoardMessageId();
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity1 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity2 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		for (EntityField entityField : entityFields) {
+			Page<MessageBoardSuspiciousActivity> page =
+				messageBoardSuspiciousActivityResource.
+					getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+						messageBoardMessageId, null, null,
+						getFilterString(
+							entityField, "eq", messageBoardSuspiciousActivity1),
+						Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(messageBoardSuspiciousActivity1),
+				(List<MessageBoardSuspiciousActivity>)page.getItems());
+		}
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithPagination()
+		throws Exception {
+
+		Long messageBoardMessageId =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getMessageBoardMessageId();
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity1 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity2 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity3 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, randomMessageBoardSuspiciousActivity());
+
+		Page<MessageBoardSuspiciousActivity> page1 =
+			messageBoardSuspiciousActivityResource.
+				getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+					messageBoardMessageId, null, null, null,
+					Pagination.of(1, 2), null);
+
+		List<MessageBoardSuspiciousActivity> messageBoardSuspiciousActivities1 =
+			(List<MessageBoardSuspiciousActivity>)page1.getItems();
+
+		Assert.assertEquals(
+			messageBoardSuspiciousActivities1.toString(), 2,
+			messageBoardSuspiciousActivities1.size());
+
+		Page<MessageBoardSuspiciousActivity> page2 =
+			messageBoardSuspiciousActivityResource.
+				getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+					messageBoardMessageId, null, null, null,
+					Pagination.of(2, 2), null);
+
+		Assert.assertEquals(3, page2.getTotalCount());
+
+		List<MessageBoardSuspiciousActivity> messageBoardSuspiciousActivities2 =
+			(List<MessageBoardSuspiciousActivity>)page2.getItems();
+
+		Assert.assertEquals(
+			messageBoardSuspiciousActivities2.toString(), 1,
+			messageBoardSuspiciousActivities2.size());
+
+		Page<MessageBoardSuspiciousActivity> page3 =
+			messageBoardSuspiciousActivityResource.
+				getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+					messageBoardMessageId, null, null, null,
+					Pagination.of(1, 3), null);
+
+		assertEqualsIgnoringOrder(
+			Arrays.asList(
+				messageBoardSuspiciousActivity1,
+				messageBoardSuspiciousActivity2,
+				messageBoardSuspiciousActivity3),
+			(List<MessageBoardSuspiciousActivity>)page3.getItems());
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSortDateTime()
+		throws Exception {
+
+		testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSort(
+			EntityField.Type.DATE_TIME,
+			(entityField, messageBoardSuspiciousActivity1,
+			 messageBoardSuspiciousActivity2) -> {
+
+				BeanTestUtil.setProperty(
+					messageBoardSuspiciousActivity1, entityField.getName(),
+					DateUtils.addMinutes(new Date(), -2));
+			});
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSortDouble()
+		throws Exception {
+
+		testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSort(
+			EntityField.Type.DOUBLE,
+			(entityField, messageBoardSuspiciousActivity1,
+			 messageBoardSuspiciousActivity2) -> {
+
+				BeanTestUtil.setProperty(
+					messageBoardSuspiciousActivity1, entityField.getName(),
+					0.1);
+				BeanTestUtil.setProperty(
+					messageBoardSuspiciousActivity2, entityField.getName(),
+					0.5);
+			});
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSortInteger()
+		throws Exception {
+
+		testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSort(
+			EntityField.Type.INTEGER,
+			(entityField, messageBoardSuspiciousActivity1,
+			 messageBoardSuspiciousActivity2) -> {
+
+				BeanTestUtil.setProperty(
+					messageBoardSuspiciousActivity1, entityField.getName(), 0);
+				BeanTestUtil.setProperty(
+					messageBoardSuspiciousActivity2, entityField.getName(), 1);
+			});
+	}
+
+	@Test
+	public void testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSortString()
+		throws Exception {
+
+		testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSort(
+			EntityField.Type.STRING,
+			(entityField, messageBoardSuspiciousActivity1,
+			 messageBoardSuspiciousActivity2) -> {
+
+				Class<?> clazz = messageBoardSuspiciousActivity1.getClass();
+
+				String entityFieldName = entityField.getName();
+
+				Method method = clazz.getMethod(
+					"get" + StringUtil.upperCaseFirstLetter(entityFieldName));
+
+				Class<?> returnType = method.getReturnType();
+
+				if (returnType.isAssignableFrom(Map.class)) {
+					BeanTestUtil.setProperty(
+						messageBoardSuspiciousActivity1, entityFieldName,
+						Collections.singletonMap("Aaa", "Aaa"));
+					BeanTestUtil.setProperty(
+						messageBoardSuspiciousActivity2, entityFieldName,
+						Collections.singletonMap("Bbb", "Bbb"));
+				}
+				else if (entityFieldName.contains("email")) {
+					BeanTestUtil.setProperty(
+						messageBoardSuspiciousActivity1, entityFieldName,
+						"aaa" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()) +
+									"@liferay.com");
+					BeanTestUtil.setProperty(
+						messageBoardSuspiciousActivity2, entityFieldName,
+						"bbb" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()) +
+									"@liferay.com");
+				}
+				else {
+					BeanTestUtil.setProperty(
+						messageBoardSuspiciousActivity1, entityFieldName,
+						"aaa" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()));
+					BeanTestUtil.setProperty(
+						messageBoardSuspiciousActivity2, entityFieldName,
+						"bbb" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()));
+				}
+			});
+	}
+
+	protected void
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPageWithSort(
+				EntityField.Type type,
+				UnsafeTriConsumer
+					<EntityField, MessageBoardSuspiciousActivity,
+					 MessageBoardSuspiciousActivity, Exception>
+						unsafeTriConsumer)
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(type);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long messageBoardMessageId =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getMessageBoardMessageId();
+
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity1 =
+			randomMessageBoardSuspiciousActivity();
+		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity2 =
+			randomMessageBoardSuspiciousActivity();
+
+		for (EntityField entityField : entityFields) {
+			unsafeTriConsumer.accept(
+				entityField, messageBoardSuspiciousActivity1,
+				messageBoardSuspiciousActivity2);
+		}
+
+		messageBoardSuspiciousActivity1 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, messageBoardSuspiciousActivity1);
+
+		messageBoardSuspiciousActivity2 =
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				messageBoardMessageId, messageBoardSuspiciousActivity2);
+
+		for (EntityField entityField : entityFields) {
+			Page<MessageBoardSuspiciousActivity> ascPage =
+				messageBoardSuspiciousActivityResource.
+					getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+						messageBoardMessageId, null, null, null,
+						Pagination.of(1, 2), entityField.getName() + ":asc");
+
+			assertEquals(
+				Arrays.asList(
+					messageBoardSuspiciousActivity1,
+					messageBoardSuspiciousActivity2),
+				(List<MessageBoardSuspiciousActivity>)ascPage.getItems());
+
+			Page<MessageBoardSuspiciousActivity> descPage =
+				messageBoardSuspiciousActivityResource.
+					getMessageBoardMessageMessageBoardSuspiciousActivityPage(
+						messageBoardMessageId, null, null, null,
+						Pagination.of(1, 2), entityField.getName() + ":desc");
+
+			assertEquals(
+				Arrays.asList(
+					messageBoardSuspiciousActivity2,
+					messageBoardSuspiciousActivity1),
+				(List<MessageBoardSuspiciousActivity>)descPage.getItems());
+		}
+	}
+
+	protected MessageBoardSuspiciousActivity
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_addMessageBoardSuspiciousActivity(
+				Long messageBoardMessageId,
+				MessageBoardSuspiciousActivity messageBoardSuspiciousActivity)
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected Long
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getMessageBoardMessageId()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected Long
+			testGetMessageBoardMessageMessageBoardSuspiciousActivityPage_getIrrelevantMessageBoardMessageId()
+		throws Exception {
+
+		return null;
+	}
+
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
 

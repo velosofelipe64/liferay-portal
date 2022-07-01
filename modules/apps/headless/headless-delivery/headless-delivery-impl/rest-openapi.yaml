@@ -3027,6 +3027,10 @@ components:
                         The ID of the Message Board Message reported.
                     format: int64
                     type: integer
+                description:
+                    description:
+                        The ID of the Message Board Message reported.
+                    type: string
                 type:
                     description:
                         The type of report.
