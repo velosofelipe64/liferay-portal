@@ -21,7 +21,6 @@ import com.liferay.headless.delivery.resource.v1_0.MessageBoardSuspiciousActivit
 import com.liferay.message.boards.model.MBSuspiciousActivity;
 import com.liferay.message.boards.service.MBSuspiciousActivityLocalService;
 import com.liferay.message.boards.service.MBSuspiciousActivityService;
-import com.liferay.message.boards.service.impl.MBSuspiciousActivityServiceImpl;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.vulcan.aggregation.Aggregation;
@@ -31,7 +30,7 @@ import com.liferay.portal.vulcan.util.TransformUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
-import sun.plugin.javascript.navig.Array;
+
 
 import java.util.List;
 import java.util.Map;
@@ -47,11 +46,11 @@ import java.util.Map;
 public class MessageBoardSuspiciousActivityResourceImpl
 	extends BaseMessageBoardSuspiciousActivityResourceImpl {
 
-	@Override
+
 	public Page<MessageBoardSuspiciousActivity> getMessageBoardThreadMessageBoardSuspiciousActivityPage(
 		Map<String, Map<String, String>> actions,
 		Long messageBoardThreadId, Long siteId, Boolean flatten,
-		String keywords, Aggregation aggregation,
+		String keywords, Aggregation aggregation,Filter filter,
 		Pagination pagination, Sort[] sorts)
 		throws Exception{
 
@@ -66,5 +65,5 @@ public class MessageBoardSuspiciousActivityResourceImpl
 
 
 	@Reference
-	private MBSuspiciousActivityServiceImpl _mbSuspiciousActivityService;
+	private MBSuspiciousActivityService _mbSuspiciousActivityService;
 }
