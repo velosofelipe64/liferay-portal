@@ -46,30 +46,28 @@ import java.util.Map;
 public class MessageBoardSuspiciousActivityResourceImpl
 	extends BaseMessageBoardSuspiciousActivityResourceImpl {
 
-
+	@Override
 	public Page<MessageBoardSuspiciousActivity> getMessageBoardThreadMessageBoardSuspiciousActivityPage(
-		Map<String, Map<String, String>> actions,
-		Long messageBoardThreadId, Long siteId, Boolean flatten,
-		String keywords, Aggregation aggregation,Filter filter,
-		Pagination pagination, Sort[] sorts)
+		Long messageBoardThreadId, String search, Aggregation aggregation,
+		Filter filter, Pagination pagination, Sort[] sorts)
 		throws Exception{
 
 			List<MBSuspiciousActivity> dados = _mbSuspiciousActivityService.getThreadSuspiciousActivities(messageBoardThreadId);
-
-			return Page.of(transform(dados, null));
-//			return Page.of(TransformUtil.transform(new Array[]{(Array) dados},null ,null));
-
+			System.out.println("DADOS");
+			System.out.println(dados);
+			Page teste = Page.of(TransformUtil.transform(dados,this::_toMessageSuspiciousAcitvity));
+			System.out.println("TESTE");
+			System.out.println(teste);
+			return teste;
 	}
 
 	public Page<MessageBoardSuspiciousActivity> getMessageBoardMessageMessageBoardSuspiciousActivityPage(
-		Map<String, Map<String, String>> actions,
-		Long messageBoardMessageId, Long siteId, Boolean flatten,
-		String keywords, Aggregation aggregation,Filter filter,
-		Pagination pagination, Sort[] sorts
+		Long messageBoardMessageId, String search, Aggregation aggregation,
+		Filter filter, Pagination pagination, Sort[] sorts
 	)
 		throws Exception{
 			List<MBSuspiciousActivity> dados = _mbSuspiciousActivityService.getMessageSuspiciousActivities(messageBoardMessageId);
-			return Page.of(transform(dados, null));
+			return Page.of(TransformUtil.transform(dados, null));
 
 	}
 
