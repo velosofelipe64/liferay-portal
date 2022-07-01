@@ -135,6 +135,34 @@ public class MessageBoardSuspiciousActivity implements Serializable {
 	protected Date createDate;
 
 	@Schema(description = "The ID of the Message Board Message reported.")
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@JsonIgnore
+	public void setDescription(
+		UnsafeSupplier<String, Exception> descriptionUnsafeSupplier) {
+
+		try {
+			description = descriptionUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField(description = "The ID of the Message Board Message reported.")
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String description;
+
+	@Schema(description = "The ID of the Message Board Message reported.")
 	public Long getMessageId() {
 		return messageId;
 	}
@@ -387,6 +415,20 @@ public class MessageBoardSuspiciousActivity implements Serializable {
 			sb.append("\"");
 
 			sb.append(liferayToJSONDateFormat.format(createDate));
+
+			sb.append("\"");
+		}
+
+		if (description != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"description\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(description));
 
 			sb.append("\"");
 		}

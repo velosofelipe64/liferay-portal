@@ -196,6 +196,7 @@ public abstract class BaseMessageBoardSuspiciousActivityResourceTestCase {
 		MessageBoardSuspiciousActivity messageBoardSuspiciousActivity =
 			randomMessageBoardSuspiciousActivity();
 
+		messageBoardSuspiciousActivity.setDescription(regex);
 		messageBoardSuspiciousActivity.setType(regex);
 
 		String json = MessageBoardSuspiciousActivitySerDes.toJSON(
@@ -206,6 +207,8 @@ public abstract class BaseMessageBoardSuspiciousActivityResourceTestCase {
 		messageBoardSuspiciousActivity =
 			MessageBoardSuspiciousActivitySerDes.toDTO(json);
 
+		Assert.assertEquals(
+			regex, messageBoardSuspiciousActivity.getDescription());
 		Assert.assertEquals(regex, messageBoardSuspiciousActivity.getType());
 	}
 
@@ -1193,6 +1196,14 @@ public abstract class BaseMessageBoardSuspiciousActivityResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("description", additionalAssertFieldName)) {
+				if (messageBoardSuspiciousActivity.getDescription() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("messageId", additionalAssertFieldName)) {
 				if (messageBoardSuspiciousActivity.getMessageId() == null) {
 					valid = false;
@@ -1365,6 +1376,17 @@ public abstract class BaseMessageBoardSuspiciousActivityResourceTestCase {
 				if (!Objects.deepEquals(
 						messageBoardSuspiciousActivity1.getCreateDate(),
 						messageBoardSuspiciousActivity2.getCreateDate())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("description", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						messageBoardSuspiciousActivity1.getDescription(),
+						messageBoardSuspiciousActivity2.getDescription())) {
 
 					return false;
 				}
@@ -1595,6 +1617,16 @@ public abstract class BaseMessageBoardSuspiciousActivityResourceTestCase {
 			return sb.toString();
 		}
 
+		if (entityFieldName.equals("description")) {
+			sb.append("'");
+			sb.append(
+				String.valueOf(
+					messageBoardSuspiciousActivity.getDescription()));
+			sb.append("'");
+
+			return sb.toString();
+		}
+
 		if (entityFieldName.equals("messageId")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -1713,6 +1745,8 @@ public abstract class BaseMessageBoardSuspiciousActivityResourceTestCase {
 		return new MessageBoardSuspiciousActivity() {
 			{
 				createDate = RandomTestUtil.nextDate();
+				description = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
 				messageId = RandomTestUtil.randomLong();
 				modifiedDate = RandomTestUtil.nextDate();
 				suspiciousActivityId = RandomTestUtil.randomLong();

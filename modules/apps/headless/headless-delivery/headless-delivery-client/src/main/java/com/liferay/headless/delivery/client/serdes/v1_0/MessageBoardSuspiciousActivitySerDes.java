@@ -91,6 +91,20 @@ public class MessageBoardSuspiciousActivitySerDes {
 			sb.append("\"");
 		}
 
+		if (messageBoardSuspiciousActivity.getDescription() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"description\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(messageBoardSuspiciousActivity.getDescription()));
+
+			sb.append("\"");
+		}
+
 		if (messageBoardSuspiciousActivity.getMessageId() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -215,6 +229,16 @@ public class MessageBoardSuspiciousActivitySerDes {
 					messageBoardSuspiciousActivity.getCreateDate()));
 		}
 
+		if (messageBoardSuspiciousActivity.getDescription() == null) {
+			map.put("description", null);
+		}
+		else {
+			map.put(
+				"description",
+				String.valueOf(
+					messageBoardSuspiciousActivity.getDescription()));
+		}
+
 		if (messageBoardSuspiciousActivity.getMessageId() == null) {
 			map.put("messageId", null);
 		}
@@ -312,6 +336,12 @@ public class MessageBoardSuspiciousActivitySerDes {
 				if (jsonParserFieldValue != null) {
 					messageBoardSuspiciousActivity.setCreateDate(
 						toDate((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "description")) {
+				if (jsonParserFieldValue != null) {
+					messageBoardSuspiciousActivity.setDescription(
+						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "messageId")) {

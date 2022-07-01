@@ -79,6 +79,27 @@ public class MessageBoardSuspiciousActivity implements Cloneable, Serializable {
 
 	protected Date createDate;
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDescription(
+		UnsafeSupplier<String, Exception> descriptionUnsafeSupplier) {
+
+		try {
+			description = descriptionUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String description;
+
 	public Long getMessageId() {
 		return messageId;
 	}
