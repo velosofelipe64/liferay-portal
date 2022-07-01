@@ -14,10 +14,27 @@
 
 package com.liferay.headless.delivery.internal.resource.v1_0;
 
+import com.liferay.headless.delivery.dto.v1_0.Field;
+import com.liferay.headless.delivery.dto.v1_0.MessageBoardSuspiciousActivity;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardSuspiciousActivityResource;
 
+import com.liferay.message.boards.model.MBSuspiciousActivity;
+import com.liferay.message.boards.service.MBSuspiciousActivityLocalService;
+import com.liferay.message.boards.service.MBSuspiciousActivityService;
+import com.liferay.message.boards.service.impl.MBSuspiciousActivityServiceImpl;
+import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.vulcan.aggregation.Aggregation;
+import com.liferay.portal.vulcan.pagination.Page;
+import com.liferay.portal.vulcan.pagination.Pagination;
+import com.liferay.portal.vulcan.util.TransformUtil;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
+import sun.plugin.javascript.navig.Array;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Javier Gamarra
@@ -29,4 +46,25 @@ import org.osgi.service.component.annotations.ServiceScope;
 )
 public class MessageBoardSuspiciousActivityResourceImpl
 	extends BaseMessageBoardSuspiciousActivityResourceImpl {
+
+	@Override
+	public Page<MessageBoardSuspiciousActivity> getMessageBoardThreadMessageBoardSuspiciousActivityPage(
+		Map<String, Map<String, String>> actions,
+		Long messageBoardThreadId, Long siteId, Boolean flatten,
+		String keywords, Aggregation aggregation,
+		Pagination pagination, Sort[] sorts)
+		throws Exception{
+
+			List<MBSuspiciousActivity> dados = _mbSuspiciousActivityService.getThreadSuspiciousActivities(messageBoardThreadId);
+
+			return Page.of(transform(dados, null));
+//			return Page.of(TransformUtil.transform(new Array[]{(Array) dados},null ,null));
+
+	}
+
+
+
+
+	@Reference
+	private MBSuspiciousActivityServiceImpl _mbSuspiciousActivityService;
 }
