@@ -238,8 +238,8 @@ public class MessageBoardThreadResourceImpl
 			_classNameLocalService.getClassNameId(MBThread.class),
 			messageBoardThreadId, 1);
 
-		_mbThreadFlagLocalService.addThreadFlag(
-			contextUser.getUserId(), mbThread, new ServiceContext());
+//		_mbThreadFlagLocalService.addThreadFlag(
+//			contextUser.getUserId(), mbThread, new ServiceContext());
 
 		return _toMessageBoardThread(mbThread);
 	}
@@ -322,9 +322,9 @@ public class MessageBoardThreadResourceImpl
 			_classNameLocalService.getClassNameId(MBThread.class),
 			mbMessage.getThreadId(), 1);
 
-		_mbThreadFlagLocalService.addThreadFlag(
-			contextUser.getUserId(), mbMessage.getThread(),
-			new ServiceContext());
+//		_mbThreadFlagLocalService.addThreadFlag(
+//			contextUser.getUserId(), mbMessage.getThread(),
+//			new ServiceContext());
 
 		return _toMessageBoardThread(mbMessage);
 	}

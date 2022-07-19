@@ -510,7 +510,7 @@
 			<finder-column comparator="!=" name="status" />
 		</finder>
 	</entity>
-	<entity human-name="message boards thread flag" local-service="true" name="MBThreadFlag" remote-service="false" uuid="true">
+	<entity human-name="message boards thread flag" local-service="true" name="MBThreadFlag" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
@@ -531,6 +531,9 @@
 		<!-- Other fields -->
 
 		<column name="threadId" type="long" />
+		<column name="messageId" type="long" />
+		<column name="reason" type="String" />
+		<column name="description" type="String" />
 		<column name="lastPublishDate" type="Date" />
 
 		<!-- Finder methods -->
@@ -544,6 +547,10 @@
 		<finder name="U_T" return-type="MBThreadFlag" unique="true">
 			<finder-column name="userId" />
 			<finder-column name="threadId" />
+		</finder>
+		<finder name="U_M" return-type="MBThreadFlag" unique="true">
+			<finder-column name="userId" />
+			<finder-column name="messageId" />
 		</finder>
 	</entity>
 	<exceptions>
