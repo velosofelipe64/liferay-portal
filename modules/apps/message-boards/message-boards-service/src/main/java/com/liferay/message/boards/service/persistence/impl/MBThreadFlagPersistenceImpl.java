@@ -2755,6 +2755,239 @@ public class MBThreadFlagPersistenceImpl
 	private static final String _FINDER_COLUMN_U_T_THREADID_2 =
 		"mbThreadFlag.threadId = ?";
 
+	private FinderPath _finderPathFetchByU_M;
+	private FinderPath _finderPathCountByU_M;
+
+	/**
+	 * Returns the message boards thread flag where userId = &#63; and messageId = &#63; or throws a <code>NoSuchThreadFlagException</code> if it could not be found.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the matching message boards thread flag
+	 * @throws NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 */
+	@Override
+	public MBThreadFlag findByU_M(long userId, long messageId)
+		throws NoSuchThreadFlagException {
+
+		MBThreadFlag mbThreadFlag = fetchByU_M(userId, messageId);
+
+		if (mbThreadFlag == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("userId=");
+			sb.append(userId);
+
+			sb.append(", messageId=");
+			sb.append(messageId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchThreadFlagException(sb.toString());
+		}
+
+		return mbThreadFlag;
+	}
+
+	/**
+	 * Returns the message boards thread flag where userId = &#63; and messageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 */
+	@Override
+	public MBThreadFlag fetchByU_M(long userId, long messageId) {
+		return fetchByU_M(userId, messageId, true);
+	}
+
+	/**
+	 * Returns the message boards thread flag where userId = &#63; and messageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 */
+	@Override
+	public MBThreadFlag fetchByU_M(
+		long userId, long messageId, boolean useFinderCache) {
+
+		boolean productionMode = ctPersistenceHelper.isProductionMode(
+			MBThreadFlag.class);
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache && productionMode) {
+			finderArgs = new Object[] {userId, messageId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache && productionMode) {
+			result = finderCache.getResult(_finderPathFetchByU_M, finderArgs);
+		}
+
+		if (result instanceof MBThreadFlag) {
+			MBThreadFlag mbThreadFlag = (MBThreadFlag)result;
+
+			if ((userId != mbThreadFlag.getUserId()) ||
+				(messageId != mbThreadFlag.getMessageId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_MBTHREADFLAG_WHERE);
+
+			sb.append(_FINDER_COLUMN_U_M_USERID_2);
+
+			sb.append(_FINDER_COLUMN_U_M_MESSAGEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(userId);
+
+				queryPos.add(messageId);
+
+				List<MBThreadFlag> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache && productionMode) {
+						finderCache.putResult(
+							_finderPathFetchByU_M, finderArgs, list);
+					}
+				}
+				else {
+					MBThreadFlag mbThreadFlag = list.get(0);
+
+					result = mbThreadFlag;
+
+					cacheResult(mbThreadFlag);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (MBThreadFlag)result;
+		}
+	}
+
+	/**
+	 * Removes the message boards thread flag where userId = &#63; and messageId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the message boards thread flag that was removed
+	 */
+	@Override
+	public MBThreadFlag removeByU_M(long userId, long messageId)
+		throws NoSuchThreadFlagException {
+
+		MBThreadFlag mbThreadFlag = findByU_M(userId, messageId);
+
+		return remove(mbThreadFlag);
+	}
+
+	/**
+	 * Returns the number of message boards thread flags where userId = &#63; and messageId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the number of matching message boards thread flags
+	 */
+	@Override
+	public int countByU_M(long userId, long messageId) {
+		boolean productionMode = ctPersistenceHelper.isProductionMode(
+			MBThreadFlag.class);
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		Long count = null;
+
+		if (productionMode) {
+			finderPath = _finderPathCountByU_M;
+
+			finderArgs = new Object[] {userId, messageId};
+
+			count = (Long)finderCache.getResult(finderPath, finderArgs);
+		}
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_MBTHREADFLAG_WHERE);
+
+			sb.append(_FINDER_COLUMN_U_M_USERID_2);
+
+			sb.append(_FINDER_COLUMN_U_M_MESSAGEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(userId);
+
+				queryPos.add(messageId);
+
+				count = (Long)query.uniqueResult();
+
+				if (productionMode) {
+					finderCache.putResult(finderPath, finderArgs, count);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_U_M_USERID_2 =
+		"mbThreadFlag.userId = ? AND ";
+
+	private static final String _FINDER_COLUMN_U_M_MESSAGEID_2 =
+		"mbThreadFlag.messageId = ?";
+
 	public MBThreadFlagPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -2792,6 +3025,13 @@ public class MBThreadFlagPersistenceImpl
 		finderCache.putResult(
 			_finderPathFetchByU_T,
 			new Object[] {mbThreadFlag.getUserId(), mbThreadFlag.getThreadId()},
+			mbThreadFlag);
+
+		finderCache.putResult(
+			_finderPathFetchByU_M,
+			new Object[] {
+				mbThreadFlag.getUserId(), mbThreadFlag.getMessageId()
+			},
 			mbThreadFlag);
 	}
 
@@ -2886,6 +3126,15 @@ public class MBThreadFlagPersistenceImpl
 		finderCache.putResult(_finderPathCountByU_T, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByU_T, args, mbThreadFlagModelImpl);
+
+		args = new Object[] {
+			mbThreadFlagModelImpl.getUserId(),
+			mbThreadFlagModelImpl.getMessageId()
+		};
+
+		finderCache.putResult(_finderPathCountByU_M, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByU_M, args, mbThreadFlagModelImpl);
 	}
 
 	/**
@@ -3541,6 +3790,9 @@ public class MBThreadFlagPersistenceImpl
 		ctStrictColumnNames.add("createDate");
 		ctIgnoreColumnNames.add("modifiedDate");
 		ctStrictColumnNames.add("threadId");
+		ctStrictColumnNames.add("messageId");
+		ctStrictColumnNames.add("reason");
+		ctStrictColumnNames.add("description");
 		ctStrictColumnNames.add("lastPublishDate");
 
 		_ctColumnNamesMap.put(
@@ -3555,6 +3807,8 @@ public class MBThreadFlagPersistenceImpl
 		_uniqueIndexColumnNames.add(new String[] {"uuid_", "groupId"});
 
 		_uniqueIndexColumnNames.add(new String[] {"userId", "threadId"});
+
+		_uniqueIndexColumnNames.add(new String[] {"userId", "messageId"});
 	}
 
 	/**
@@ -3668,6 +3922,16 @@ public class MBThreadFlagPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_T",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"userId", "threadId"}, false);
+
+		_finderPathFetchByU_M = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByU_M",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"userId", "messageId"}, true);
+
+		_finderPathCountByU_M = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_M",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"userId", "messageId"}, false);
 
 		_setMBThreadFlagUtilPersistence(this);
 	}

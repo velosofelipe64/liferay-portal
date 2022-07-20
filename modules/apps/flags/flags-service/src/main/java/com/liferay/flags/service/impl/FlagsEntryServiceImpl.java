@@ -26,7 +26,8 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.message.boards.service.MBThreadFlagLocalService;
+import com.liferay.message.boards.service.MBThreadFlagService;
+import com.liferay.message.boards.service.MBThreadLocalService;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -60,11 +61,17 @@ public class FlagsEntryServiceImpl extends FlagsEntryServiceBaseImpl {
 			contentTitle, contentURL, reason, serviceContext);
 
 		Message message = new Message();
-//		_mbThreadFlagLocalService.
 		message.setPayload(flagsRequest);
 
 		_messageBus.sendMessage(DestinationNames.FLAGS, message);
 
+		if(className.equals("com.liferay.message.boards.model.MBMessage")){
+			MBThread mbThread = _mbThreadLocalService.getThread(classPK + 1);
+
+			_mbThreadFlagService.addThreadFlag(
+				mbThread, new ServiceContext());
+
+		}
 
 
 	}
@@ -73,6 +80,9 @@ public class FlagsEntryServiceImpl extends FlagsEntryServiceBaseImpl {
 	private MessageBus _messageBus;
 
 	@Reference
-	private MBThreadFlagService _mbThreadFlagLocalService;
+	private MBThreadFlagService _mbThreadFlagService;
+
+	@Reference
+	private MBTheadLocalService _mbThreadLocalService;
 
 }

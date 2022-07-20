@@ -727,6 +727,56 @@ public interface MBThreadFlagPersistence
 	public int countByU_T(long userId, long threadId);
 
 	/**
+	 * Returns the message boards thread flag where userId = &#63; and messageId = &#63; or throws a <code>NoSuchThreadFlagException</code> if it could not be found.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the matching message boards thread flag
+	 * @throws NoSuchThreadFlagException if a matching message boards thread flag could not be found
+	 */
+	public MBThreadFlag findByU_M(long userId, long messageId)
+		throws NoSuchThreadFlagException;
+
+	/**
+	 * Returns the message boards thread flag where userId = &#63; and messageId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 */
+	public MBThreadFlag fetchByU_M(long userId, long messageId);
+
+	/**
+	 * Returns the message boards thread flag where userId = &#63; and messageId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching message boards thread flag, or <code>null</code> if a matching message boards thread flag could not be found
+	 */
+	public MBThreadFlag fetchByU_M(
+		long userId, long messageId, boolean useFinderCache);
+
+	/**
+	 * Removes the message boards thread flag where userId = &#63; and messageId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the message boards thread flag that was removed
+	 */
+	public MBThreadFlag removeByU_M(long userId, long messageId)
+		throws NoSuchThreadFlagException;
+
+	/**
+	 * Returns the number of message boards thread flags where userId = &#63; and messageId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param messageId the message ID
+	 * @return the number of matching message boards thread flags
+	 */
+	public int countByU_M(long userId, long messageId);
+
+	/**
 	 * Caches the message boards thread flag in the entity cache if it is enabled.
 	 *
 	 * @param mbThreadFlag the message boards thread flag

@@ -22,6 +22,7 @@ import com.liferay.message.boards.model.MBThreadFlagModel;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.model.User;
@@ -60,6 +61,7 @@ import java.util.function.Function;
  * @see MBThreadFlagImpl
  * @generated
  */
+@JSON(strict = true)
 public class MBThreadFlagModelImpl
 	extends BaseModelImpl<MBThreadFlag> implements MBThreadFlagModel {
 
@@ -76,7 +78,9 @@ public class MBThreadFlagModelImpl
 		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"threadId", Types.BIGINT}, {"lastPublishDate", Types.TIMESTAMP}
+		{"threadId", Types.BIGINT}, {"messageId", Types.BIGINT},
+		{"reason", Types.VARCHAR}, {"description", Types.VARCHAR},
+		{"lastPublishDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -94,11 +98,14 @@ public class MBThreadFlagModelImpl
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("threadId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("messageId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("reason", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("description", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table MBThreadFlag (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,threadFlagId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,threadId LONG,lastPublishDate DATE null,primary key (threadFlagId, ctCollectionId))";
+		"create table MBThreadFlag (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,threadFlagId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,threadId LONG,messageId LONG,reason VARCHAR(75) null,description VARCHAR(75) null,lastPublishDate DATE null,primary key (threadFlagId, ctCollectionId))";
 
 	public static final String TABLE_SQL_DROP = "drop table MBThreadFlag";
 
@@ -130,26 +137,32 @@ public class MBThreadFlagModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long THREADID_COLUMN_BITMASK = 4L;
+	public static final long MESSAGEID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long USERID_COLUMN_BITMASK = 8L;
+	public static final long THREADID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 16L;
+	public static final long USERID_COLUMN_BITMASK = 16L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long THREADFLAGID_COLUMN_BITMASK = 32L;
+	public static final long THREADFLAGID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -307,6 +320,19 @@ public class MBThreadFlagModelImpl
 		attributeSetterBiConsumers.put(
 			"threadId",
 			(BiConsumer<MBThreadFlag, Long>)MBThreadFlag::setThreadId);
+		attributeGetterFunctions.put("messageId", MBThreadFlag::getMessageId);
+		attributeSetterBiConsumers.put(
+			"messageId",
+			(BiConsumer<MBThreadFlag, Long>)MBThreadFlag::setMessageId);
+		attributeGetterFunctions.put("reason", MBThreadFlag::getReason);
+		attributeSetterBiConsumers.put(
+			"reason",
+			(BiConsumer<MBThreadFlag, String>)MBThreadFlag::setReason);
+		attributeGetterFunctions.put(
+			"description", MBThreadFlag::getDescription);
+		attributeSetterBiConsumers.put(
+			"description",
+			(BiConsumer<MBThreadFlag, String>)MBThreadFlag::setDescription);
 		attributeGetterFunctions.put(
 			"lastPublishDate", MBThreadFlag::getLastPublishDate);
 		attributeSetterBiConsumers.put(
@@ -319,6 +345,7 @@ public class MBThreadFlagModelImpl
 			(Map)attributeSetterBiConsumers);
 	}
 
+	@JSON
 	@Override
 	public long getMvccVersion() {
 		return _mvccVersion;
@@ -333,6 +360,7 @@ public class MBThreadFlagModelImpl
 		_mvccVersion = mvccVersion;
 	}
 
+	@JSON
 	@Override
 	public long getCtCollectionId() {
 		return _ctCollectionId;
@@ -347,6 +375,7 @@ public class MBThreadFlagModelImpl
 		_ctCollectionId = ctCollectionId;
 	}
 
+	@JSON
 	@Override
 	public String getUuid() {
 		if (_uuid == null) {
@@ -375,6 +404,7 @@ public class MBThreadFlagModelImpl
 		return getColumnOriginalValue("uuid_");
 	}
 
+	@JSON
 	@Override
 	public long getThreadFlagId() {
 		return _threadFlagId;
@@ -389,6 +419,7 @@ public class MBThreadFlagModelImpl
 		_threadFlagId = threadFlagId;
 	}
 
+	@JSON
 	@Override
 	public long getGroupId() {
 		return _groupId;
@@ -412,6 +443,7 @@ public class MBThreadFlagModelImpl
 		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("groupId"));
 	}
 
+	@JSON
 	@Override
 	public long getCompanyId() {
 		return _companyId;
@@ -436,6 +468,7 @@ public class MBThreadFlagModelImpl
 			this.<Long>getColumnOriginalValue("companyId"));
 	}
 
+	@JSON
 	@Override
 	public long getUserId() {
 		return _userId;
@@ -475,6 +508,7 @@ public class MBThreadFlagModelImpl
 		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("userId"));
 	}
 
+	@JSON
 	@Override
 	public String getUserName() {
 		if (_userName == null) {
@@ -494,6 +528,7 @@ public class MBThreadFlagModelImpl
 		_userName = userName;
 	}
 
+	@JSON
 	@Override
 	public Date getCreateDate() {
 		return _createDate;
@@ -508,6 +543,7 @@ public class MBThreadFlagModelImpl
 		_createDate = createDate;
 	}
 
+	@JSON
 	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
@@ -528,6 +564,7 @@ public class MBThreadFlagModelImpl
 		_modifiedDate = modifiedDate;
 	}
 
+	@JSON
 	@Override
 	public long getThreadId() {
 		return _threadId;
@@ -552,6 +589,72 @@ public class MBThreadFlagModelImpl
 			this.<Long>getColumnOriginalValue("threadId"));
 	}
 
+	@JSON
+	@Override
+	public long getMessageId() {
+		return _messageId;
+	}
+
+	@Override
+	public void setMessageId(long messageId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_messageId = messageId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalMessageId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("messageId"));
+	}
+
+	@JSON
+	@Override
+	public String getReason() {
+		if (_reason == null) {
+			return "";
+		}
+		else {
+			return _reason;
+		}
+	}
+
+	@Override
+	public void setReason(String reason) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_reason = reason;
+	}
+
+	@JSON
+	@Override
+	public String getDescription() {
+		if (_description == null) {
+			return "";
+		}
+		else {
+			return _description;
+		}
+	}
+
+	@Override
+	public void setDescription(String description) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_description = description;
+	}
+
+	@JSON
 	@Override
 	public Date getLastPublishDate() {
 		return _lastPublishDate;
@@ -639,6 +742,9 @@ public class MBThreadFlagModelImpl
 		mbThreadFlagImpl.setCreateDate(getCreateDate());
 		mbThreadFlagImpl.setModifiedDate(getModifiedDate());
 		mbThreadFlagImpl.setThreadId(getThreadId());
+		mbThreadFlagImpl.setMessageId(getMessageId());
+		mbThreadFlagImpl.setReason(getReason());
+		mbThreadFlagImpl.setDescription(getDescription());
 		mbThreadFlagImpl.setLastPublishDate(getLastPublishDate());
 
 		mbThreadFlagImpl.resetOriginalValues();
@@ -670,6 +776,12 @@ public class MBThreadFlagModelImpl
 			this.<Date>getColumnOriginalValue("modifiedDate"));
 		mbThreadFlagImpl.setThreadId(
 			this.<Long>getColumnOriginalValue("threadId"));
+		mbThreadFlagImpl.setMessageId(
+			this.<Long>getColumnOriginalValue("messageId"));
+		mbThreadFlagImpl.setReason(
+			this.<String>getColumnOriginalValue("reason"));
+		mbThreadFlagImpl.setDescription(
+			this.<String>getColumnOriginalValue("description"));
 		mbThreadFlagImpl.setLastPublishDate(
 			this.<Date>getColumnOriginalValue("lastPublishDate"));
 
@@ -798,6 +910,24 @@ public class MBThreadFlagModelImpl
 
 		mbThreadFlagCacheModel.threadId = getThreadId();
 
+		mbThreadFlagCacheModel.messageId = getMessageId();
+
+		mbThreadFlagCacheModel.reason = getReason();
+
+		String reason = mbThreadFlagCacheModel.reason;
+
+		if ((reason != null) && (reason.length() == 0)) {
+			mbThreadFlagCacheModel.reason = null;
+		}
+
+		mbThreadFlagCacheModel.description = getDescription();
+
+		String description = mbThreadFlagCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			mbThreadFlagCacheModel.description = null;
+		}
+
 		Date lastPublishDate = getLastPublishDate();
 
 		if (lastPublishDate != null) {
@@ -911,6 +1041,9 @@ public class MBThreadFlagModelImpl
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
 	private long _threadId;
+	private long _messageId;
+	private String _reason;
+	private String _description;
 	private Date _lastPublishDate;
 
 	public <T> T getColumnValue(String columnName) {
@@ -953,6 +1086,9 @@ public class MBThreadFlagModelImpl
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("threadId", _threadId);
+		_columnOriginalValues.put("messageId", _messageId);
+		_columnOriginalValues.put("reason", _reason);
+		_columnOriginalValues.put("description", _description);
 		_columnOriginalValues.put("lastPublishDate", _lastPublishDate);
 	}
 
@@ -999,7 +1135,13 @@ public class MBThreadFlagModelImpl
 
 		columnBitmasks.put("threadId", 1024L);
 
-		columnBitmasks.put("lastPublishDate", 2048L);
+		columnBitmasks.put("messageId", 2048L);
+
+		columnBitmasks.put("reason", 4096L);
+
+		columnBitmasks.put("description", 8192L);
+
+		columnBitmasks.put("lastPublishDate", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

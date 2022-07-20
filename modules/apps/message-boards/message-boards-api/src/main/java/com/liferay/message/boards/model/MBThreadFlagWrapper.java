@@ -56,6 +56,9 @@ public class MBThreadFlagWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("threadId", getThreadId());
+		attributes.put("messageId", getMessageId());
+		attributes.put("reason", getReason());
+		attributes.put("description", getDescription());
 		attributes.put("lastPublishDate", getLastPublishDate());
 
 		return attributes;
@@ -129,6 +132,24 @@ public class MBThreadFlagWrapper
 			setThreadId(threadId);
 		}
 
+		Long messageId = (Long)attributes.get("messageId");
+
+		if (messageId != null) {
+			setMessageId(messageId);
+		}
+
+		String reason = (String)attributes.get("reason");
+
+		if (reason != null) {
+			setReason(reason);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
 		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
 
 		if (lastPublishDate != null) {
@@ -172,6 +193,16 @@ public class MBThreadFlagWrapper
 	}
 
 	/**
+	 * Returns the description of this message boards thread flag.
+	 *
+	 * @return the description of this message boards thread flag
+	 */
+	@Override
+	public String getDescription() {
+		return model.getDescription();
+	}
+
+	/**
 	 * Returns the group ID of this message boards thread flag.
 	 *
 	 * @return the group ID of this message boards thread flag
@@ -189,6 +220,16 @@ public class MBThreadFlagWrapper
 	@Override
 	public Date getLastPublishDate() {
 		return model.getLastPublishDate();
+	}
+
+	/**
+	 * Returns the message ID of this message boards thread flag.
+	 *
+	 * @return the message ID of this message boards thread flag
+	 */
+	@Override
+	public long getMessageId() {
+		return model.getMessageId();
 	}
 
 	/**
@@ -219,6 +260,16 @@ public class MBThreadFlagWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
+	}
+
+	/**
+	 * Returns the reason of this message boards thread flag.
+	 *
+	 * @return the reason of this message boards thread flag
+	 */
+	@Override
+	public String getReason() {
+		return model.getReason();
 	}
 
 	/**
@@ -317,6 +368,16 @@ public class MBThreadFlagWrapper
 	}
 
 	/**
+	 * Sets the description of this message boards thread flag.
+	 *
+	 * @param description the description of this message boards thread flag
+	 */
+	@Override
+	public void setDescription(String description) {
+		model.setDescription(description);
+	}
+
+	/**
 	 * Sets the group ID of this message boards thread flag.
 	 *
 	 * @param groupId the group ID of this message boards thread flag
@@ -334,6 +395,16 @@ public class MBThreadFlagWrapper
 	@Override
 	public void setLastPublishDate(Date lastPublishDate) {
 		model.setLastPublishDate(lastPublishDate);
+	}
+
+	/**
+	 * Sets the message ID of this message boards thread flag.
+	 *
+	 * @param messageId the message ID of this message boards thread flag
+	 */
+	@Override
+	public void setMessageId(long messageId) {
+		model.setMessageId(messageId);
 	}
 
 	/**
@@ -364,6 +435,16 @@ public class MBThreadFlagWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	 * Sets the reason of this message boards thread flag.
+	 *
+	 * @param reason the reason of this message boards thread flag
+	 */
+	@Override
+	public void setReason(String reason) {
+		model.setReason(reason);
 	}
 
 	/**

@@ -254,6 +254,50 @@ public interface MBThreadFlagModel
 	public void setThreadId(long threadId);
 
 	/**
+	 * Returns the message ID of this message boards thread flag.
+	 *
+	 * @return the message ID of this message boards thread flag
+	 */
+	public long getMessageId();
+
+	/**
+	 * Sets the message ID of this message boards thread flag.
+	 *
+	 * @param messageId the message ID of this message boards thread flag
+	 */
+	public void setMessageId(long messageId);
+
+	/**
+	 * Returns the reason of this message boards thread flag.
+	 *
+	 * @return the reason of this message boards thread flag
+	 */
+	@AutoEscape
+	public String getReason();
+
+	/**
+	 * Sets the reason of this message boards thread flag.
+	 *
+	 * @param reason the reason of this message boards thread flag
+	 */
+	public void setReason(String reason);
+
+	/**
+	 * Returns the description of this message boards thread flag.
+	 *
+	 * @return the description of this message boards thread flag
+	 */
+	@AutoEscape
+	public String getDescription();
+
+	/**
+	 * Sets the description of this message boards thread flag.
+	 *
+	 * @param description the description of this message boards thread flag
+	 */
+	public void setDescription(String description);
+
+	/**
 	 * Returns the last publish date of this message boards thread flag.
 	 *
 	 * @return the last publish date of this message boards thread flag

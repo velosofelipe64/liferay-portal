@@ -180,6 +180,9 @@ create table MBThreadFlag (
 	createDate DATE null,
 	modifiedDate DATE null,
 	threadId LONG,
+	messageId LONG,
+	reason VARCHAR(75) null,
+	description VARCHAR(75) null,
 	lastPublishDate DATE null,
 	primary key (threadFlagId, ctCollectionId)
 );

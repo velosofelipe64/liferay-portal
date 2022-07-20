@@ -81,6 +81,7 @@ create unique index IX_9DB28BD9 on MBThread (uuid_[$COLUMN_LENGTH:75$], groupId,
 
 create index IX_91B1A4A8 on MBThreadFlag (threadId, ctCollectionId);
 create index IX_F156E0A9 on MBThreadFlag (userId, ctCollectionId);
+create unique index IX_79354DE5 on MBThreadFlag (userId, messageId, ctCollectionId);
 create unique index IX_B2386762 on MBThreadFlag (userId, threadId, ctCollectionId);
 create index IX_ADF5B523 on MBThreadFlag (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
 create index IX_AEED2BE1 on MBThreadFlag (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);

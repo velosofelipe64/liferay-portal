@@ -77,7 +77,7 @@ public class MBThreadFlagCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -101,6 +101,12 @@ public class MBThreadFlagCacheModel
 		sb.append(modifiedDate);
 		sb.append(", threadId=");
 		sb.append(threadId);
+		sb.append(", messageId=");
+		sb.append(messageId);
+		sb.append(", reason=");
+		sb.append(reason);
+		sb.append(", description=");
+		sb.append(description);
 		sb.append(", lastPublishDate=");
 		sb.append(lastPublishDate);
 		sb.append("}");
@@ -149,6 +155,21 @@ public class MBThreadFlagCacheModel
 		}
 
 		mbThreadFlagImpl.setThreadId(threadId);
+		mbThreadFlagImpl.setMessageId(messageId);
+
+		if (reason == null) {
+			mbThreadFlagImpl.setReason("");
+		}
+		else {
+			mbThreadFlagImpl.setReason(reason);
+		}
+
+		if (description == null) {
+			mbThreadFlagImpl.setDescription("");
+		}
+		else {
+			mbThreadFlagImpl.setDescription(description);
+		}
 
 		if (lastPublishDate == Long.MIN_VALUE) {
 			mbThreadFlagImpl.setLastPublishDate(null);
@@ -181,6 +202,10 @@ public class MBThreadFlagCacheModel
 		modifiedDate = objectInput.readLong();
 
 		threadId = objectInput.readLong();
+
+		messageId = objectInput.readLong();
+		reason = objectInput.readUTF();
+		description = objectInput.readUTF();
 		lastPublishDate = objectInput.readLong();
 	}
 
@@ -216,6 +241,23 @@ public class MBThreadFlagCacheModel
 		objectOutput.writeLong(modifiedDate);
 
 		objectOutput.writeLong(threadId);
+
+		objectOutput.writeLong(messageId);
+
+		if (reason == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(reason);
+		}
+
+		if (description == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(description);
+		}
+
 		objectOutput.writeLong(lastPublishDate);
 	}
 
@@ -230,6 +272,9 @@ public class MBThreadFlagCacheModel
 	public long createDate;
 	public long modifiedDate;
 	public long threadId;
+	public long messageId;
+	public String reason;
+	public String description;
 	public long lastPublishDate;
 
 }
