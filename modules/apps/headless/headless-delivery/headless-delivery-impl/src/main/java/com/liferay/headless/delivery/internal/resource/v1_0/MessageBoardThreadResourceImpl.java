@@ -36,7 +36,7 @@ import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.MBCategoryService;
 import com.liferay.message.boards.service.MBMessageLocalService;
 import com.liferay.message.boards.service.MBMessageService;
-import com.liferay.message.boards.service.MBThreadFlagLocalService;
+//import com.liferay.message.boards.service.MBThreadFlagLocalService;
 import com.liferay.message.boards.service.MBThreadLocalService;
 import com.liferay.message.boards.service.MBThreadService;
 import com.liferay.message.boards.settings.MBGroupServiceSettings;
@@ -238,8 +238,8 @@ public class MessageBoardThreadResourceImpl
 			_classNameLocalService.getClassNameId(MBThread.class),
 			messageBoardThreadId, 1);
 
-		_mbThreadFlagLocalService.addThreadFlag(
-			contextUser.getUserId(), mbThread, new ServiceContext());
+//		_mbThreadFlagLocalService.addThreadFlag(
+//			contextUser.getUserId(), mbThread, new ServiceContext());
 
 		return _toMessageBoardThread(mbThread);
 	}
@@ -322,9 +322,9 @@ public class MessageBoardThreadResourceImpl
 			_classNameLocalService.getClassNameId(MBThread.class),
 			mbMessage.getThreadId(), 1);
 
-		_mbThreadFlagLocalService.addThreadFlag(
-			contextUser.getUserId(), mbMessage.getThread(),
-			new ServiceContext());
+//		_mbThreadFlagLocalService.addThreadFlag(
+//			contextUser.getUserId(), mbMessage.getThread(),
+//			new ServiceContext());
 
 		return _toMessageBoardThread(mbMessage);
 	}
@@ -820,8 +820,8 @@ public class MessageBoardThreadResourceImpl
 	@Reference
 	private MBMessageService _mbMessageService;
 
-	@Reference
-	private MBThreadFlagLocalService _mbThreadFlagLocalService;
+//	@Reference
+//	private MBThreadFlagLocalService _mbThreadFlagLocalService;
 
 	@Reference
 	private MBThreadLocalService _mbThreadLocalService;
