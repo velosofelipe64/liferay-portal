@@ -22,6 +22,7 @@ import com.liferay.message.boards.model.MBThreadFlagModel;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.model.User;
@@ -60,6 +61,7 @@ import java.util.function.Function;
  * @see MBThreadFlagImpl
  * @generated
  */
+@JSON(strict = true)
 public class MBThreadFlagModelImpl
 	extends BaseModelImpl<MBThreadFlag> implements MBThreadFlagModel {
 
@@ -319,6 +321,7 @@ public class MBThreadFlagModelImpl
 			(Map)attributeSetterBiConsumers);
 	}
 
+	@JSON
 	@Override
 	public long getMvccVersion() {
 		return _mvccVersion;
@@ -333,6 +336,7 @@ public class MBThreadFlagModelImpl
 		_mvccVersion = mvccVersion;
 	}
 
+	@JSON
 	@Override
 	public long getCtCollectionId() {
 		return _ctCollectionId;
@@ -347,6 +351,7 @@ public class MBThreadFlagModelImpl
 		_ctCollectionId = ctCollectionId;
 	}
 
+	@JSON
 	@Override
 	public String getUuid() {
 		if (_uuid == null) {
@@ -375,6 +380,7 @@ public class MBThreadFlagModelImpl
 		return getColumnOriginalValue("uuid_");
 	}
 
+	@JSON
 	@Override
 	public long getThreadFlagId() {
 		return _threadFlagId;
@@ -389,6 +395,7 @@ public class MBThreadFlagModelImpl
 		_threadFlagId = threadFlagId;
 	}
 
+	@JSON
 	@Override
 	public long getGroupId() {
 		return _groupId;
@@ -412,6 +419,7 @@ public class MBThreadFlagModelImpl
 		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("groupId"));
 	}
 
+	@JSON
 	@Override
 	public long getCompanyId() {
 		return _companyId;
@@ -436,6 +444,7 @@ public class MBThreadFlagModelImpl
 			this.<Long>getColumnOriginalValue("companyId"));
 	}
 
+	@JSON
 	@Override
 	public long getUserId() {
 		return _userId;
@@ -475,6 +484,7 @@ public class MBThreadFlagModelImpl
 		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("userId"));
 	}
 
+	@JSON
 	@Override
 	public String getUserName() {
 		if (_userName == null) {
@@ -494,6 +504,7 @@ public class MBThreadFlagModelImpl
 		_userName = userName;
 	}
 
+	@JSON
 	@Override
 	public Date getCreateDate() {
 		return _createDate;
@@ -508,6 +519,7 @@ public class MBThreadFlagModelImpl
 		_createDate = createDate;
 	}
 
+	@JSON
 	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
@@ -528,6 +540,7 @@ public class MBThreadFlagModelImpl
 		_modifiedDate = modifiedDate;
 	}
 
+	@JSON
 	@Override
 	public long getThreadId() {
 		return _threadId;
@@ -552,6 +565,7 @@ public class MBThreadFlagModelImpl
 			this.<Long>getColumnOriginalValue("threadId"));
 	}
 
+	@JSON
 	@Override
 	public Date getLastPublishDate() {
 		return _lastPublishDate;
