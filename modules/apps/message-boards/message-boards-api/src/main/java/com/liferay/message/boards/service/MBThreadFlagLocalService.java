@@ -89,6 +89,12 @@ public interface MBThreadFlagLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public MBThreadFlag addThreadFlag(
+			long userId, long classPK, long reportingUser, String title,
+			String reason, long creatorUserId, ServiceContext serviceContext)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public MBThreadFlag addThreadFlag(
 			long userId, MBThread thread, ServiceContext serviceContext)
 		throws PortalException;
 

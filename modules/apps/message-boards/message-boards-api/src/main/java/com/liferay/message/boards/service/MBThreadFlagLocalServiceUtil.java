@@ -60,6 +60,17 @@ public class MBThreadFlagLocalServiceUtil {
 	}
 
 	public static MBThreadFlag addThreadFlag(
+			long userId, long classPK, long reportingUser, String title,
+			String reason, long creatorUserId,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		return getService().addThreadFlag(
+			userId, classPK, reportingUser, title, reason, creatorUserId,
+			serviceContext);
+	}
+
+	public static MBThreadFlag addThreadFlag(
 			long userId, com.liferay.message.boards.model.MBThread thread,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws PortalException {

@@ -14,8 +14,11 @@
 
 package com.liferay.message.boards.service.impl;
 
+import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.model.MBThreadFlag;
+import com.liferay.message.boards.service.MBMessageLocalService;
+import com.liferay.message.boards.service.MBThreadLocalService;
 import com.liferay.message.boards.service.base.MBThreadFlagLocalServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -89,6 +92,100 @@ public class MBThreadFlagLocalServiceImpl
 		return mbThreadFlagLocalService.updateMBThreadFlag(threadFlag);
 	}
 
+
+	@Override
+	public MBThreadFlag addThreadFlag(
+		long userId, long classPK, long reportingUser, String title ,String reason, long creatorUserId, ServiceContext serviceContext)
+		throws PortalException {
+
+		User user = _userLocalService.getUser(userId);
+
+		if (user.isDefaultUser()) {
+			return null;
+		}
+
+
+		classPK = classPK +1;
+
+		MBThreadFlag threadFlag = null;
+		if(title.contains("RE:")){
+
+			threadFlag = mbThreadFlagPersistence.fetchByU_M(userId,classPK);
+			MBMessage mbMessage = _mbMessageLocalService.getMessage(classPK);
+
+			if(threadFlag == null){
+
+
+
+				long threadFlagId = counterLocalService.increment();
+
+				threadFlag = mbThreadFlagPersistence.create(threadFlagId);
+
+				threadFlag.setUuid(serviceContext.getUuid());
+				threadFlag.setGroupId(mbMessage.getGroupId());
+				threadFlag.setCompanyId(user.getCompanyId());
+				threadFlag.setUserId(userId);
+				threadFlag.setUserName(user.getFullName());
+				threadFlag.setModifiedDate(
+					serviceContext.getModifiedDate(mbMessage.getModifiedDate()));
+				threadFlag.setMessageId(classPK);
+				threadFlag.setThreadId(mbMessage.getThreadId());
+
+				threadFlag.setReportingUser(reportingUser);
+				threadFlag.setReason(reason);
+				threadFlag.setCreatorUserId(creatorUserId);
+
+
+			}else{
+
+				threadFlag.setModifiedDate(mbMessage.getModifiedDate());
+
+
+			}
+
+		}else{
+
+			threadFlag = mbThreadFlagPersistence.fetchByU_T(userId,classPK);
+			MBThread mbThread = _mbThreadLocalService.getThread(classPK);
+
+			if(threadFlag == null){
+
+
+
+				long threadFlagId = counterLocalService.increment();
+
+				threadFlag = mbThreadFlagPersistence.create(threadFlagId);
+
+				threadFlag.setUuid(serviceContext.getUuid());
+				threadFlag.setGroupId(mbThread.getGroupId());
+				threadFlag.setCompanyId(user.getCompanyId());
+				threadFlag.setUserId(userId);
+				threadFlag.setUserName(user.getFullName());
+				threadFlag.setModifiedDate(
+					serviceContext.getModifiedDate(mbThread.getModifiedDate()));
+				threadFlag.setMessageId(classPK);
+				threadFlag.setThreadId(mbThread.getThreadId());
+
+				threadFlag.setReportingUser(reportingUser);
+				threadFlag.setReason(reason);
+				threadFlag.setCreatorUserId(creatorUserId);
+
+
+			}else{
+
+				threadFlag.setModifiedDate(mbThread.getModifiedDate());
+
+
+			}
+
+
+		}
+
+
+		return mbThreadFlagLocalService.updateMBThreadFlag(threadFlag);
+	}
+
+
 	@Override
 	public void deleteThreadFlag(long threadFlagId) throws PortalException {
 		MBThreadFlag threadFlag = mbThreadFlagPersistence.findByPrimaryKey(
@@ -161,5 +258,11 @@ public class MBThreadFlagLocalServiceImpl
 
 	@Reference
 	private UserLocalService _userLocalService;
+
+	@Reference
+	private MBThreadLocalService _mbThreadLocalService;
+
+	@Reference
+	private MBMessageLocalService _mbMessageLocalService;
 
 }

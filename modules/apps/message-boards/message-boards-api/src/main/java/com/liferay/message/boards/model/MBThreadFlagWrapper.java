@@ -55,7 +55,12 @@ public class MBThreadFlagWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("reportingUser", getReportingUser());
+		attributes.put("creatorUserId", getCreatorUserId());
+		attributes.put("reason", getReason());
+		attributes.put("messageId", getMessageId());
 		attributes.put("threadId", getThreadId());
+		attributes.put("validated", isValidated());
 		attributes.put("lastPublishDate", getLastPublishDate());
 
 		return attributes;
@@ -123,10 +128,40 @@ public class MBThreadFlagWrapper
 			setModifiedDate(modifiedDate);
 		}
 
+		Long reportingUser = (Long)attributes.get("reportingUser");
+
+		if (reportingUser != null) {
+			setReportingUser(reportingUser);
+		}
+
+		Long creatorUserId = (Long)attributes.get("creatorUserId");
+
+		if (creatorUserId != null) {
+			setCreatorUserId(creatorUserId);
+		}
+
+		String reason = (String)attributes.get("reason");
+
+		if (reason != null) {
+			setReason(reason);
+		}
+
+		Long messageId = (Long)attributes.get("messageId");
+
+		if (messageId != null) {
+			setMessageId(messageId);
+		}
+
 		Long threadId = (Long)attributes.get("threadId");
 
 		if (threadId != null) {
 			setThreadId(threadId);
+		}
+
+		Boolean validated = (Boolean)attributes.get("validated");
+
+		if (validated != null) {
+			setValidated(validated);
 		}
 
 		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
@@ -162,6 +197,26 @@ public class MBThreadFlagWrapper
 	}
 
 	/**
+	 * Returns the creator user ID of this message boards thread flag.
+	 *
+	 * @return the creator user ID of this message boards thread flag
+	 */
+	@Override
+	public long getCreatorUserId() {
+		return model.getCreatorUserId();
+	}
+
+	/**
+	 * Returns the creator user uuid of this message boards thread flag.
+	 *
+	 * @return the creator user uuid of this message boards thread flag
+	 */
+	@Override
+	public String getCreatorUserUuid() {
+		return model.getCreatorUserUuid();
+	}
+
+	/**
 	 * Returns the ct collection ID of this message boards thread flag.
 	 *
 	 * @return the ct collection ID of this message boards thread flag
@@ -192,6 +247,16 @@ public class MBThreadFlagWrapper
 	}
 
 	/**
+	 * Returns the message ID of this message boards thread flag.
+	 *
+	 * @return the message ID of this message boards thread flag
+	 */
+	@Override
+	public long getMessageId() {
+		return model.getMessageId();
+	}
+
+	/**
 	 * Returns the modified date of this message boards thread flag.
 	 *
 	 * @return the modified date of this message boards thread flag
@@ -219,6 +284,26 @@ public class MBThreadFlagWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
+	}
+
+	/**
+	 * Returns the reason of this message boards thread flag.
+	 *
+	 * @return the reason of this message boards thread flag
+	 */
+	@Override
+	public String getReason() {
+		return model.getReason();
+	}
+
+	/**
+	 * Returns the reporting user of this message boards thread flag.
+	 *
+	 * @return the reporting user of this message boards thread flag
+	 */
+	@Override
+	public long getReportingUser() {
+		return model.getReportingUser();
 	}
 
 	/**
@@ -281,6 +366,26 @@ public class MBThreadFlagWrapper
 		return model.getUuid();
 	}
 
+	/**
+	 * Returns the validated of this message boards thread flag.
+	 *
+	 * @return the validated of this message boards thread flag
+	 */
+	@Override
+	public boolean getValidated() {
+		return model.getValidated();
+	}
+
+	/**
+	 * Returns <code>true</code> if this message boards thread flag is validated.
+	 *
+	 * @return <code>true</code> if this message boards thread flag is validated; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isValidated() {
+		return model.isValidated();
+	}
+
 	@Override
 	public void persist() {
 		model.persist();
@@ -304,6 +409,26 @@ public class MBThreadFlagWrapper
 	@Override
 	public void setCreateDate(Date createDate) {
 		model.setCreateDate(createDate);
+	}
+
+	/**
+	 * Sets the creator user ID of this message boards thread flag.
+	 *
+	 * @param creatorUserId the creator user ID of this message boards thread flag
+	 */
+	@Override
+	public void setCreatorUserId(long creatorUserId) {
+		model.setCreatorUserId(creatorUserId);
+	}
+
+	/**
+	 * Sets the creator user uuid of this message boards thread flag.
+	 *
+	 * @param creatorUserUuid the creator user uuid of this message boards thread flag
+	 */
+	@Override
+	public void setCreatorUserUuid(String creatorUserUuid) {
+		model.setCreatorUserUuid(creatorUserUuid);
 	}
 
 	/**
@@ -337,6 +462,16 @@ public class MBThreadFlagWrapper
 	}
 
 	/**
+	 * Sets the message ID of this message boards thread flag.
+	 *
+	 * @param messageId the message ID of this message boards thread flag
+	 */
+	@Override
+	public void setMessageId(long messageId) {
+		model.setMessageId(messageId);
+	}
+
+	/**
 	 * Sets the modified date of this message boards thread flag.
 	 *
 	 * @param modifiedDate the modified date of this message boards thread flag
@@ -364,6 +499,26 @@ public class MBThreadFlagWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	 * Sets the reason of this message boards thread flag.
+	 *
+	 * @param reason the reason of this message boards thread flag
+	 */
+	@Override
+	public void setReason(String reason) {
+		model.setReason(reason);
+	}
+
+	/**
+	 * Sets the reporting user of this message boards thread flag.
+	 *
+	 * @param reportingUser the reporting user of this message boards thread flag
+	 */
+	@Override
+	public void setReportingUser(long reportingUser) {
+		model.setReportingUser(reportingUser);
 	}
 
 	/**
@@ -424,6 +579,16 @@ public class MBThreadFlagWrapper
 	@Override
 	public void setUuid(String uuid) {
 		model.setUuid(uuid);
+	}
+
+	/**
+	 * Sets whether this message boards thread flag is validated.
+	 *
+	 * @param validated the validated of this message boards thread flag
+	 */
+	@Override
+	public void setValidated(boolean validated) {
+		model.setValidated(validated);
 	}
 
 	@Override

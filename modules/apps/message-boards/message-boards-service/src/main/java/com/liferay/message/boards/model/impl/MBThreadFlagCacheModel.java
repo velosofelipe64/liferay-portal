@@ -77,7 +77,7 @@ public class MBThreadFlagCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -99,8 +99,18 @@ public class MBThreadFlagCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
+		sb.append(", reportingUser=");
+		sb.append(reportingUser);
+		sb.append(", creatorUserId=");
+		sb.append(creatorUserId);
+		sb.append(", reason=");
+		sb.append(reason);
+		sb.append(", messageId=");
+		sb.append(messageId);
 		sb.append(", threadId=");
 		sb.append(threadId);
+		sb.append(", validated=");
+		sb.append(validated);
 		sb.append(", lastPublishDate=");
 		sb.append(lastPublishDate);
 		sb.append("}");
@@ -148,7 +158,19 @@ public class MBThreadFlagCacheModel
 			mbThreadFlagImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
+		mbThreadFlagImpl.setReportingUser(reportingUser);
+		mbThreadFlagImpl.setCreatorUserId(creatorUserId);
+
+		if (reason == null) {
+			mbThreadFlagImpl.setReason("");
+		}
+		else {
+			mbThreadFlagImpl.setReason(reason);
+		}
+
+		mbThreadFlagImpl.setMessageId(messageId);
 		mbThreadFlagImpl.setThreadId(threadId);
+		mbThreadFlagImpl.setValidated(validated);
 
 		if (lastPublishDate == Long.MIN_VALUE) {
 			mbThreadFlagImpl.setLastPublishDate(null);
@@ -180,7 +202,16 @@ public class MBThreadFlagCacheModel
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 
+		reportingUser = objectInput.readLong();
+
+		creatorUserId = objectInput.readLong();
+		reason = objectInput.readUTF();
+
+		messageId = objectInput.readLong();
+
 		threadId = objectInput.readLong();
+
+		validated = objectInput.readBoolean();
 		lastPublishDate = objectInput.readLong();
 	}
 
@@ -215,7 +246,22 @@ public class MBThreadFlagCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
+		objectOutput.writeLong(reportingUser);
+
+		objectOutput.writeLong(creatorUserId);
+
+		if (reason == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(reason);
+		}
+
+		objectOutput.writeLong(messageId);
+
 		objectOutput.writeLong(threadId);
+
+		objectOutput.writeBoolean(validated);
 		objectOutput.writeLong(lastPublishDate);
 	}
 
@@ -229,7 +275,12 @@ public class MBThreadFlagCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
+	public long reportingUser;
+	public long creatorUserId;
+	public String reason;
+	public long messageId;
 	public long threadId;
+	public boolean validated;
 	public long lastPublishDate;
 
 }

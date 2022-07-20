@@ -197,7 +197,12 @@
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
+		<field name="reportingUser" type="long" />
+		<field name="creatorUserId" type="long" />
+		<field name="reason" type="String" />
+		<field name="messageId" type="long" />
 		<field name="threadId" type="long" />
+		<field name="validated" type="boolean" />
 		<field name="lastPublishDate" type="Date" />
 	</model>
 </model-hints>

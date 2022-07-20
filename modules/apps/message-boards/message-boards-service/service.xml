@@ -529,8 +529,12 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-
+		<column name="reportingUser" type="long" />
+		<column name="creatorUserId" type="long" />
+		<column name="reason" type="String" />
+		<column name="messageId" type="long" />
 		<column name="threadId" type="long" />
+		<column name="validated" type="boolean" />
 		<column name="lastPublishDate" type="Date" />
 
 		<!-- Finder methods -->
@@ -540,6 +544,10 @@
 		</finder>
 		<finder name="ThreadId" return-type="Collection">
 			<finder-column name="threadId" />
+		</finder>
+		<finder name="U_M" return-type="MBThreadFlag" unique="true">
+			<finder-column name="userId" />
+			<finder-column name="messageId" />
 		</finder>
 		<finder name="U_T" return-type="MBThreadFlag" unique="true">
 			<finder-column name="userId" />

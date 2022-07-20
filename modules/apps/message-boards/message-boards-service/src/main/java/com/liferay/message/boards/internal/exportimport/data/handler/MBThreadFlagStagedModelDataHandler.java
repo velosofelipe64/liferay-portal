@@ -168,8 +168,6 @@ public class MBThreadFlagStagedModelDataHandler
 
 		serviceContext.setUuid(threadFlag.getUuid());
 
-		_mbThreadFlagLocalService.addThreadFlag(
-			user.getUserId(), thread, serviceContext);
 	}
 
 	@Reference(unbind = "-")

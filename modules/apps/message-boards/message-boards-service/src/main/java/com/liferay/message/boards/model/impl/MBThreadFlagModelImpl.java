@@ -78,7 +78,10 @@ public class MBThreadFlagModelImpl
 		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"threadId", Types.BIGINT}, {"lastPublishDate", Types.TIMESTAMP}
+		{"reportingUser", Types.BIGINT}, {"creatorUserId", Types.BIGINT},
+		{"reason", Types.VARCHAR}, {"messageId", Types.BIGINT},
+		{"threadId", Types.BIGINT}, {"validated", Types.BOOLEAN},
+		{"lastPublishDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -95,12 +98,17 @@ public class MBThreadFlagModelImpl
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("reportingUser", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("creatorUserId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("reason", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("messageId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("threadId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("validated", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table MBThreadFlag (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,threadFlagId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,threadId LONG,lastPublishDate DATE null,primary key (threadFlagId, ctCollectionId))";
+		"create table MBThreadFlag (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,threadFlagId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,reportingUser LONG,creatorUserId LONG,reason VARCHAR(75) null,messageId LONG,threadId LONG,validated BOOLEAN,lastPublishDate DATE null,primary key (threadFlagId, ctCollectionId))";
 
 	public static final String TABLE_SQL_DROP = "drop table MBThreadFlag";
 
@@ -132,26 +140,32 @@ public class MBThreadFlagModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long THREADID_COLUMN_BITMASK = 4L;
+	public static final long MESSAGEID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long USERID_COLUMN_BITMASK = 8L;
+	public static final long THREADID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 16L;
+	public static final long USERID_COLUMN_BITMASK = 16L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long THREADFLAGID_COLUMN_BITMASK = 32L;
+	public static final long THREADFLAGID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -305,10 +319,32 @@ public class MBThreadFlagModelImpl
 		attributeSetterBiConsumers.put(
 			"modifiedDate",
 			(BiConsumer<MBThreadFlag, Date>)MBThreadFlag::setModifiedDate);
+		attributeGetterFunctions.put(
+			"reportingUser", MBThreadFlag::getReportingUser);
+		attributeSetterBiConsumers.put(
+			"reportingUser",
+			(BiConsumer<MBThreadFlag, Long>)MBThreadFlag::setReportingUser);
+		attributeGetterFunctions.put(
+			"creatorUserId", MBThreadFlag::getCreatorUserId);
+		attributeSetterBiConsumers.put(
+			"creatorUserId",
+			(BiConsumer<MBThreadFlag, Long>)MBThreadFlag::setCreatorUserId);
+		attributeGetterFunctions.put("reason", MBThreadFlag::getReason);
+		attributeSetterBiConsumers.put(
+			"reason",
+			(BiConsumer<MBThreadFlag, String>)MBThreadFlag::setReason);
+		attributeGetterFunctions.put("messageId", MBThreadFlag::getMessageId);
+		attributeSetterBiConsumers.put(
+			"messageId",
+			(BiConsumer<MBThreadFlag, Long>)MBThreadFlag::setMessageId);
 		attributeGetterFunctions.put("threadId", MBThreadFlag::getThreadId);
 		attributeSetterBiConsumers.put(
 			"threadId",
 			(BiConsumer<MBThreadFlag, Long>)MBThreadFlag::setThreadId);
+		attributeGetterFunctions.put("validated", MBThreadFlag::getValidated);
+		attributeSetterBiConsumers.put(
+			"validated",
+			(BiConsumer<MBThreadFlag, Boolean>)MBThreadFlag::setValidated);
 		attributeGetterFunctions.put(
 			"lastPublishDate", MBThreadFlag::getLastPublishDate);
 		attributeSetterBiConsumers.put(
@@ -542,6 +578,97 @@ public class MBThreadFlagModelImpl
 
 	@JSON
 	@Override
+	public long getReportingUser() {
+		return _reportingUser;
+	}
+
+	@Override
+	public void setReportingUser(long reportingUser) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_reportingUser = reportingUser;
+	}
+
+	@JSON
+	@Override
+	public long getCreatorUserId() {
+		return _creatorUserId;
+	}
+
+	@Override
+	public void setCreatorUserId(long creatorUserId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_creatorUserId = creatorUserId;
+	}
+
+	@Override
+	public String getCreatorUserUuid() {
+		try {
+			User user = UserLocalServiceUtil.getUserById(getCreatorUserId());
+
+			return user.getUuid();
+		}
+		catch (PortalException portalException) {
+			return "";
+		}
+	}
+
+	@Override
+	public void setCreatorUserUuid(String creatorUserUuid) {
+	}
+
+	@JSON
+	@Override
+	public String getReason() {
+		if (_reason == null) {
+			return "";
+		}
+		else {
+			return _reason;
+		}
+	}
+
+	@Override
+	public void setReason(String reason) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_reason = reason;
+	}
+
+	@JSON
+	@Override
+	public long getMessageId() {
+		return _messageId;
+	}
+
+	@Override
+	public void setMessageId(long messageId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_messageId = messageId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalMessageId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("messageId"));
+	}
+
+	@JSON
+	@Override
 	public long getThreadId() {
 		return _threadId;
 	}
@@ -563,6 +690,27 @@ public class MBThreadFlagModelImpl
 	public long getOriginalThreadId() {
 		return GetterUtil.getLong(
 			this.<Long>getColumnOriginalValue("threadId"));
+	}
+
+	@JSON
+	@Override
+	public boolean getValidated() {
+		return _validated;
+	}
+
+	@JSON
+	@Override
+	public boolean isValidated() {
+		return _validated;
+	}
+
+	@Override
+	public void setValidated(boolean validated) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_validated = validated;
 	}
 
 	@JSON
@@ -652,7 +800,12 @@ public class MBThreadFlagModelImpl
 		mbThreadFlagImpl.setUserName(getUserName());
 		mbThreadFlagImpl.setCreateDate(getCreateDate());
 		mbThreadFlagImpl.setModifiedDate(getModifiedDate());
+		mbThreadFlagImpl.setReportingUser(getReportingUser());
+		mbThreadFlagImpl.setCreatorUserId(getCreatorUserId());
+		mbThreadFlagImpl.setReason(getReason());
+		mbThreadFlagImpl.setMessageId(getMessageId());
 		mbThreadFlagImpl.setThreadId(getThreadId());
+		mbThreadFlagImpl.setValidated(isValidated());
 		mbThreadFlagImpl.setLastPublishDate(getLastPublishDate());
 
 		mbThreadFlagImpl.resetOriginalValues();
@@ -682,8 +835,18 @@ public class MBThreadFlagModelImpl
 			this.<Date>getColumnOriginalValue("createDate"));
 		mbThreadFlagImpl.setModifiedDate(
 			this.<Date>getColumnOriginalValue("modifiedDate"));
+		mbThreadFlagImpl.setReportingUser(
+			this.<Long>getColumnOriginalValue("reportingUser"));
+		mbThreadFlagImpl.setCreatorUserId(
+			this.<Long>getColumnOriginalValue("creatorUserId"));
+		mbThreadFlagImpl.setReason(
+			this.<String>getColumnOriginalValue("reason"));
+		mbThreadFlagImpl.setMessageId(
+			this.<Long>getColumnOriginalValue("messageId"));
 		mbThreadFlagImpl.setThreadId(
 			this.<Long>getColumnOriginalValue("threadId"));
+		mbThreadFlagImpl.setValidated(
+			this.<Boolean>getColumnOriginalValue("validated"));
 		mbThreadFlagImpl.setLastPublishDate(
 			this.<Date>getColumnOriginalValue("lastPublishDate"));
 
@@ -810,7 +973,23 @@ public class MBThreadFlagModelImpl
 			mbThreadFlagCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
 
+		mbThreadFlagCacheModel.reportingUser = getReportingUser();
+
+		mbThreadFlagCacheModel.creatorUserId = getCreatorUserId();
+
+		mbThreadFlagCacheModel.reason = getReason();
+
+		String reason = mbThreadFlagCacheModel.reason;
+
+		if ((reason != null) && (reason.length() == 0)) {
+			mbThreadFlagCacheModel.reason = null;
+		}
+
+		mbThreadFlagCacheModel.messageId = getMessageId();
+
 		mbThreadFlagCacheModel.threadId = getThreadId();
+
+		mbThreadFlagCacheModel.validated = isValidated();
 
 		Date lastPublishDate = getLastPublishDate();
 
@@ -924,7 +1103,12 @@ public class MBThreadFlagModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
+	private long _reportingUser;
+	private long _creatorUserId;
+	private String _reason;
+	private long _messageId;
 	private long _threadId;
+	private boolean _validated;
 	private Date _lastPublishDate;
 
 	public <T> T getColumnValue(String columnName) {
@@ -966,7 +1150,12 @@ public class MBThreadFlagModelImpl
 		_columnOriginalValues.put("userName", _userName);
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
+		_columnOriginalValues.put("reportingUser", _reportingUser);
+		_columnOriginalValues.put("creatorUserId", _creatorUserId);
+		_columnOriginalValues.put("reason", _reason);
+		_columnOriginalValues.put("messageId", _messageId);
 		_columnOriginalValues.put("threadId", _threadId);
+		_columnOriginalValues.put("validated", _validated);
 		_columnOriginalValues.put("lastPublishDate", _lastPublishDate);
 	}
 
@@ -1011,9 +1200,19 @@ public class MBThreadFlagModelImpl
 
 		columnBitmasks.put("modifiedDate", 512L);
 
-		columnBitmasks.put("threadId", 1024L);
+		columnBitmasks.put("reportingUser", 1024L);
 
-		columnBitmasks.put("lastPublishDate", 2048L);
+		columnBitmasks.put("creatorUserId", 2048L);
+
+		columnBitmasks.put("reason", 4096L);
+
+		columnBitmasks.put("messageId", 8192L);
+
+		columnBitmasks.put("threadId", 16384L);
+
+		columnBitmasks.put("validated", 32768L);
+
+		columnBitmasks.put("lastPublishDate", 65536L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

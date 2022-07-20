@@ -52,8 +52,18 @@ public class MBThreadFlagTable extends BaseTable<MBThreadFlagTable> {
 		"createDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<MBThreadFlagTable, Date> modifiedDate = createColumn(
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
+	public final Column<MBThreadFlagTable, Long> reportingUser = createColumn(
+		"reportingUser", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<MBThreadFlagTable, Long> creatorUserId = createColumn(
+		"creatorUserId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<MBThreadFlagTable, String> reason = createColumn(
+		"reason", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<MBThreadFlagTable, Long> messageId = createColumn(
+		"messageId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<MBThreadFlagTable, Long> threadId = createColumn(
 		"threadId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<MBThreadFlagTable, Boolean> validated = createColumn(
+		"validated", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<MBThreadFlagTable, Date> lastPublishDate = createColumn(
 		"lastPublishDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 

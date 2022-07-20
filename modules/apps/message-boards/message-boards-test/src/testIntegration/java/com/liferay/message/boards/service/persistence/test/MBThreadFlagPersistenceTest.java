@@ -142,7 +142,17 @@ public class MBThreadFlagPersistenceTest {
 
 		newMBThreadFlag.setModifiedDate(RandomTestUtil.nextDate());
 
+		newMBThreadFlag.setReportingUser(RandomTestUtil.nextLong());
+
+		newMBThreadFlag.setCreatorUserId(RandomTestUtil.nextLong());
+
+		newMBThreadFlag.setReason(RandomTestUtil.randomString());
+
+		newMBThreadFlag.setMessageId(RandomTestUtil.nextLong());
+
 		newMBThreadFlag.setThreadId(RandomTestUtil.nextLong());
+
+		newMBThreadFlag.setValidated(RandomTestUtil.randomBoolean());
 
 		newMBThreadFlag.setLastPublishDate(RandomTestUtil.nextDate());
 
@@ -178,7 +188,20 @@ public class MBThreadFlagPersistenceTest {
 			Time.getShortTimestamp(existingMBThreadFlag.getModifiedDate()),
 			Time.getShortTimestamp(newMBThreadFlag.getModifiedDate()));
 		Assert.assertEquals(
+			existingMBThreadFlag.getReportingUser(),
+			newMBThreadFlag.getReportingUser());
+		Assert.assertEquals(
+			existingMBThreadFlag.getCreatorUserId(),
+			newMBThreadFlag.getCreatorUserId());
+		Assert.assertEquals(
+			existingMBThreadFlag.getReason(), newMBThreadFlag.getReason());
+		Assert.assertEquals(
+			existingMBThreadFlag.getMessageId(),
+			newMBThreadFlag.getMessageId());
+		Assert.assertEquals(
 			existingMBThreadFlag.getThreadId(), newMBThreadFlag.getThreadId());
+		Assert.assertEquals(
+			existingMBThreadFlag.isValidated(), newMBThreadFlag.isValidated());
 		Assert.assertEquals(
 			Time.getShortTimestamp(existingMBThreadFlag.getLastPublishDate()),
 			Time.getShortTimestamp(newMBThreadFlag.getLastPublishDate()));
@@ -226,6 +249,14 @@ public class MBThreadFlagPersistenceTest {
 	}
 
 	@Test
+	public void testCountByU_M() throws Exception {
+		_persistence.countByU_M(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong());
+
+		_persistence.countByU_M(0L, 0L);
+	}
+
+	@Test
 	public void testCountByU_T() throws Exception {
 		_persistence.countByU_T(
 			RandomTestUtil.nextLong(), RandomTestUtil.nextLong());
@@ -261,7 +292,9 @@ public class MBThreadFlagPersistenceTest {
 			"MBThreadFlag", "mvccVersion", true, "ctCollectionId", true, "uuid",
 			true, "threadFlagId", true, "groupId", true, "companyId", true,
 			"userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "threadId", true, "lastPublishDate", true);
+			"modifiedDate", true, "reportingUser", true, "creatorUserId", true,
+			"reason", true, "messageId", true, "threadId", true, "validated",
+			true, "lastPublishDate", true);
 	}
 
 	@Test
@@ -545,6 +578,17 @@ public class MBThreadFlagPersistenceTest {
 				mbThreadFlag, "getColumnOriginalValue",
 				new Class<?>[] {String.class}, "userId"));
 		Assert.assertEquals(
+			Long.valueOf(mbThreadFlag.getMessageId()),
+			ReflectionTestUtil.<Long>invoke(
+				mbThreadFlag, "getColumnOriginalValue",
+				new Class<?>[] {String.class}, "messageId"));
+
+		Assert.assertEquals(
+			Long.valueOf(mbThreadFlag.getUserId()),
+			ReflectionTestUtil.<Long>invoke(
+				mbThreadFlag, "getColumnOriginalValue",
+				new Class<?>[] {String.class}, "userId"));
+		Assert.assertEquals(
 			Long.valueOf(mbThreadFlag.getThreadId()),
 			ReflectionTestUtil.<Long>invoke(
 				mbThreadFlag, "getColumnOriginalValue",
@@ -574,7 +618,17 @@ public class MBThreadFlagPersistenceTest {
 
 		mbThreadFlag.setModifiedDate(RandomTestUtil.nextDate());
 
+		mbThreadFlag.setReportingUser(RandomTestUtil.nextLong());
+
+		mbThreadFlag.setCreatorUserId(RandomTestUtil.nextLong());
+
+		mbThreadFlag.setReason(RandomTestUtil.randomString());
+
+		mbThreadFlag.setMessageId(RandomTestUtil.nextLong());
+
 		mbThreadFlag.setThreadId(RandomTestUtil.nextLong());
+
+		mbThreadFlag.setValidated(RandomTestUtil.randomBoolean());
 
 		mbThreadFlag.setLastPublishDate(RandomTestUtil.nextDate());
 

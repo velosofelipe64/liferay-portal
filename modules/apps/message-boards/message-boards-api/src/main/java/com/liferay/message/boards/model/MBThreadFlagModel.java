@@ -240,6 +240,77 @@ public interface MBThreadFlagModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the reporting user of this message boards thread flag.
+	 *
+	 * @return the reporting user of this message boards thread flag
+	 */
+	public long getReportingUser();
+
+	/**
+	 * Sets the reporting user of this message boards thread flag.
+	 *
+	 * @param reportingUser the reporting user of this message boards thread flag
+	 */
+	public void setReportingUser(long reportingUser);
+
+	/**
+	 * Returns the creator user ID of this message boards thread flag.
+	 *
+	 * @return the creator user ID of this message boards thread flag
+	 */
+	public long getCreatorUserId();
+
+	/**
+	 * Sets the creator user ID of this message boards thread flag.
+	 *
+	 * @param creatorUserId the creator user ID of this message boards thread flag
+	 */
+	public void setCreatorUserId(long creatorUserId);
+
+	/**
+	 * Returns the creator user uuid of this message boards thread flag.
+	 *
+	 * @return the creator user uuid of this message boards thread flag
+	 */
+	public String getCreatorUserUuid();
+
+	/**
+	 * Sets the creator user uuid of this message boards thread flag.
+	 *
+	 * @param creatorUserUuid the creator user uuid of this message boards thread flag
+	 */
+	public void setCreatorUserUuid(String creatorUserUuid);
+
+	/**
+	 * Returns the reason of this message boards thread flag.
+	 *
+	 * @return the reason of this message boards thread flag
+	 */
+	@AutoEscape
+	public String getReason();
+
+	/**
+	 * Sets the reason of this message boards thread flag.
+	 *
+	 * @param reason the reason of this message boards thread flag
+	 */
+	public void setReason(String reason);
+
+	/**
+	 * Returns the message ID of this message boards thread flag.
+	 *
+	 * @return the message ID of this message boards thread flag
+	 */
+	public long getMessageId();
+
+	/**
+	 * Sets the message ID of this message boards thread flag.
+	 *
+	 * @param messageId the message ID of this message boards thread flag
+	 */
+	public void setMessageId(long messageId);
+
+	/**
 	 * Returns the thread ID of this message boards thread flag.
 	 *
 	 * @return the thread ID of this message boards thread flag
@@ -252,6 +323,27 @@ public interface MBThreadFlagModel
 	 * @param threadId the thread ID of this message boards thread flag
 	 */
 	public void setThreadId(long threadId);
+
+	/**
+	 * Returns the validated of this message boards thread flag.
+	 *
+	 * @return the validated of this message boards thread flag
+	 */
+	public boolean getValidated();
+
+	/**
+	 * Returns <code>true</code> if this message boards thread flag is validated.
+	 *
+	 * @return <code>true</code> if this message boards thread flag is validated; <code>false</code> otherwise
+	 */
+	public boolean isValidated();
+
+	/**
+	 * Sets whether this message boards thread flag is validated.
+	 *
+	 * @param validated the validated of this message boards thread flag
+	 */
+	public void setValidated(boolean validated);
 
 	/**
 	 * Returns the last publish date of this message boards thread flag.

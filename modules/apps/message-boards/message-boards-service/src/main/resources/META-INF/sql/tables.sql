@@ -179,7 +179,12 @@ create table MBThreadFlag (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
+	reportingUser LONG,
+	creatorUserId LONG,
+	reason VARCHAR(75) null,
+	messageId LONG,
 	threadId LONG,
+	validated BOOLEAN,
 	lastPublishDate DATE null,
 	primary key (threadFlagId, ctCollectionId)
 );

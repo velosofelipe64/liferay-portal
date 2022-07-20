@@ -38,11 +38,11 @@ public class MBThreadFlagServiceImpl extends MBThreadFlagServiceBaseImpl {
 
 	@Override
 	public MBThreadFlag addThreadFlag(
-		MBThread thread, ServiceContext serviceContext)
+		long classPK, long reportingUser, String title ,String reason, long creatorUserId, ServiceContext serviceContext)
 		throws PortalException {
 
 		return mbThreadFlagLocalService.addThreadFlag(
-			getUserId(),thread,serviceContext);
+			getUserId(), classPK, reportingUser, title, reason, creatorUserId, serviceContext);
 	}
 
 

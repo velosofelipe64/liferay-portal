@@ -26,8 +26,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.message.boards.service.MBThreadFlagLocalService;
-
+import com.liferay.message.boards.service.MBThreadFlagService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -64,11 +63,40 @@ public class FlagsEntryServiceImpl extends FlagsEntryServiceBaseImpl {
 		message.setPayload(flagsRequest);
 
 		_messageBus.sendMessage(DestinationNames.FLAGS, message);
+
+		if(className.equals("com.liferay.message.boards.model.MBMessage")){
+
+
+			System.out.println("ID of thread or message reported");
+			System.out.println(classPK);
+
+
+			System.out.println("User was reported the Thread or message");
+			System.out.println(reportedUserId);
+
+			System.out.println("Title od thread or message");
+			System.out.println(contentTitle);
+
+			System.out.println("Reason of the thread or message was reported");
+			System.out.println(reason);
+
+			System.out.println("User was reported the Thread or message");
+			System.out.println(serviceContext.getUserId());
+
+			_mbThreadFlagService.addThreadFlag(
+				classPK,serviceContext.getUserId(),
+				contentTitle,reason,reportedUserId,
+				serviceContext);
+
+
+		}
+
 	}
 
 	@Reference
 	private MessageBus _messageBus;
 
 	@Reference
-	private MBThreadFlagService _mbThreadFlagLocalService;
+	private MBThreadFlagService _mbThreadFlagService;
+
 }

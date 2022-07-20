@@ -57,6 +57,18 @@ public class MBThreadFlagLocalServiceWrapper
 
 	@Override
 	public MBThreadFlag addThreadFlag(
+			long userId, long classPK, long reportingUser, String title,
+			String reason, long creatorUserId,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _mbThreadFlagLocalService.addThreadFlag(
+			userId, classPK, reportingUser, title, reason, creatorUserId,
+			serviceContext);
+	}
+
+	@Override
+	public MBThreadFlag addThreadFlag(
 			long userId, com.liferay.message.boards.model.MBThread thread,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
