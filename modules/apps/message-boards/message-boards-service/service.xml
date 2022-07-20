@@ -510,7 +510,7 @@
 			<finder-column comparator="!=" name="status" />
 		</finder>
 	</entity>
-	<entity human-name="message boards thread flag" local-service="true" name="MBThreadFlag" remote-service="false" uuid="true">
+	<entity human-name="message boards thread flag" local-service="true" name="MBThreadFlag" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
