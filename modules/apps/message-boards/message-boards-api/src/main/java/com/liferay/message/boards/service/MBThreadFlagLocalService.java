@@ -87,7 +87,6 @@ public interface MBThreadFlagLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public MBThreadFlag addMBThreadFlag(MBThreadFlag mbThreadFlag);
 
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public MBThreadFlag addThreadFlag(
 			long userId, long classPK, long reportingUser, String title,
 			String reason, long creatorUserId, ServiceContext serviceContext)
