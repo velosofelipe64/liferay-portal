@@ -1,6 +1,10 @@
 Bundle-Name: Liferay Message Boards API
 Bundle-SymbolicName: com.liferay.message.boards.api
+<<<<<<< HEAD
 Bundle-Version: 15.0.2
+=======
+Bundle-Version: 15.1.0
+>>>>>>> 816ac9b (LPS-160589 buildService)
 Export-Package:\
 	com.liferay.message.boards.configuration,\
 	com.liferay.message.boards.constants,\
