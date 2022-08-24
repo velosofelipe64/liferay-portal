@@ -452,12 +452,6 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 		JoinStep joinStep = null;
 
-		Predicate predicate = MBThreadTable.INSTANCE.categoryId.eq(
-			categoryId
-		).and(
-			MBThreadTable.INSTANCE.groupId.eq(groupId)
-		);
-
 		if (sorts != null) {
 			joinStep = DSLQueryFactoryUtil.select(
 				MBThreadTable.INSTANCE
@@ -477,9 +471,11 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			search = search.trim();
 		}
 
-		if (tag != null) {
-			tag = tag.trim();
-		}
+		Predicate predicate = MBThreadTable.INSTANCE.categoryId.eq(
+			categoryId
+		).and(
+			MBThreadTable.INSTANCE.groupId.eq(groupId)
+		);
 
 		if ((search != null) && (search.length() != 0)) {
 			predicate = predicate.and(
@@ -487,8 +483,6 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 			return mbThreadPersistence.dslQuery(joinStep.where(predicate));
 		}
-
-		OrderByExpression orderByExpression = null;
 
 		if (filter != null) {
 			String filterString = filter.toString();
@@ -547,6 +541,10 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			}
 		}
 
+		if (tag != null) {
+			tag = tag.trim();
+		}
+
 		if ((tag != null) && (tag.length() != 0)) {
 			joinStep = joinStep.innerJoinON(
 				AssetEntryTable.INSTANCE,
@@ -583,6 +581,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 				predicate = predicate.and(AssetTagTable.INSTANCE.name.in(tags));
 			}
 		}
+
+		OrderByExpression orderByExpression = null;
 
 		if (sorts != null) {
 			Sort sort = sorts[0];
