@@ -541,11 +541,7 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			}
 		}
 
-		if (tag != null) {
-			tag = tag.trim();
-		}
-
-		if ((tag != null) && (tag.length() != 0)) {
+		if (Validator.isNotNull(tag)) {
 			joinStep = joinStep.innerJoinON(
 				AssetEntryTable.INSTANCE,
 				AssetEntryTable.INSTANCE.classPK.eq(
