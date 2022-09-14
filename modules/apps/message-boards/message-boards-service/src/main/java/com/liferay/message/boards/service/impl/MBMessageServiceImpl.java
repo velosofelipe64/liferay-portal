@@ -40,6 +40,8 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.parsers.bbcode.BBCodeTranslatorUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -822,9 +824,9 @@ public class MBMessageServiceImpl extends MBMessageServiceBaseImpl {
 
 		mbMessageLocalService.unsubscribeMessage(getUserId(), messageId);
 	}
-
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
-	public void updateAnswer(long messageId, boolean answer, boolean cascade)
+	public MBMessage updateAnswer(long messageId, boolean answer, boolean cascade)
 		throws PortalException {
 
 		MBMessage message = mbMessagePersistence.findByPrimaryKey(messageId);
@@ -833,7 +835,7 @@ public class MBMessageServiceImpl extends MBMessageServiceBaseImpl {
 			getPermissionChecker(), message.getRootMessageId(),
 			ActionKeys.UPDATE);
 
-		mbMessageLocalService.updateAnswer(messageId, answer, cascade);
+		return mbMessageLocalService.updateAnswer(messageId, answer, cascade);
 	}
 
 	@Override

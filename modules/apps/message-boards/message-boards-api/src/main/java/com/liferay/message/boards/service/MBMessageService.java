@@ -22,6 +22,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -257,7 +259,9 @@ public interface MBMessageService extends BaseService {
 
 	public void unsubscribeMessage(long messageId) throws PortalException;
 
-	public void updateAnswer(long messageId, boolean answer, boolean cascade)
+	@Indexable(type = IndexableType.REINDEX)
+	public MBMessage updateAnswer(
+			long messageId, boolean answer, boolean cascade)
 		throws PortalException;
 
 	public MBMessage updateDiscussionMessage(

@@ -18,6 +18,8 @@ import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.service.persistence.MBMessageFinder;
 import com.liferay.message.boards.service.persistence.MBMessagePersistence;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -70,8 +72,8 @@ public class MBMessageUtil {
 
 		return messages;
 	}
-
-	public static void updateAnswer(
+	@Indexable(type = IndexableType.REINDEX)
+	public static MBMessage updateAnswer(
 		MBMessagePersistence mbMessagePersistence, MBMessage message,
 		boolean answer, boolean cascade) {
 
@@ -89,6 +91,7 @@ public class MBMessageUtil {
 				updateAnswer(mbMessagePersistence, curMessage, answer, cascade);
 			}
 		}
+		return message;
 	}
 
 	private MBMessageUtil() {

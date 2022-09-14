@@ -15,12 +15,18 @@
 package com.liferay.message.boards.internal.search.spi.model.index.contributor;
 
 import com.liferay.message.boards.model.MBDiscussion;
+import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.MBDiscussionLocalService;
+import com.liferay.message.boards.service.MBMessageLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.spi.model.index.contributor.ModelDocumentContributor;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -49,6 +55,15 @@ public class MBThreadModelDocumentContributor
 			document.addKeyword("discussion", true);
 		}
 
+		MBMessage mbMessage = null;
+		try {
+			mbMessage =
+				_mbMessageLocalService.getMessage(mbThread.getRootMessageId());
+		}
+		catch (PortalException e) {
+			throw new RuntimeException(e);
+		}
+
 		Date lastPostDate = mbThread.getLastPostDate();
 
 		document.addKeyword("lastPostDate", lastPostDate.getTime());
@@ -60,4 +75,6 @@ public class MBThreadModelDocumentContributor
 	@Reference
 	protected MBDiscussionLocalService mbDiscussionLocalService;
 
+	@Reference
+	private MBMessageLocalService _mbMessageLocalService;
 }
