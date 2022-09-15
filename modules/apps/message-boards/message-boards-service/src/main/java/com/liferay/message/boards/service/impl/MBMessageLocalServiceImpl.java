@@ -1681,14 +1681,14 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		MBMessage message = mbMessagePersistence.findByPrimaryKey(messageId);
 
-		updateAnswer(message, answer, cascade);
+		return updateAnswer(message, answer, cascade);
 	}
 
 	@Override
 	public MBMessage updateAnswer(MBMessage message, boolean answer, boolean cascade)
 		throws PortalException {
 
-		MBMessageUtil.updateAnswer(
+		return MBMessageUtil.updateAnswer(
 			mbMessagePersistence, message, answer, cascade);
 	}
 

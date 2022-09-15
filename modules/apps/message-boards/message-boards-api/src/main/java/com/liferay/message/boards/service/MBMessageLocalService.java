@@ -712,10 +712,12 @@ public interface MBMessageLocalService
 	public void unsubscribeMessage(long userId, long messageId)
 		throws PortalException;
 
-	public void updateAnswer(long messageId, boolean answer, boolean cascade)
+	public MBMessage updateAnswer(
+			long messageId, boolean answer, boolean cascade)
 		throws PortalException;
 
-	public void updateAnswer(MBMessage message, boolean answer, boolean cascade)
+	public MBMessage updateAnswer(
+			MBMessage message, boolean answer, boolean cascade)
 		throws PortalException;
 
 	public void updateAsset(
