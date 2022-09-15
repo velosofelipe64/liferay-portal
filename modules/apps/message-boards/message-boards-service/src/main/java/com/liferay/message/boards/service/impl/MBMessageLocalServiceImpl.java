@@ -1674,7 +1674,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		_subscriptionLocalService.deleteSubscription(
 			userId, MBThread.class.getName(), message.getThreadId());
 	}
-
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public MBMessage updateAnswer(long messageId, boolean answer, boolean cascade)
 		throws PortalException {
@@ -1683,7 +1683,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		return updateAnswer(message, answer, cascade);
 	}
-
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public MBMessage updateAnswer(MBMessage message, boolean answer, boolean cascade)
 		throws PortalException {

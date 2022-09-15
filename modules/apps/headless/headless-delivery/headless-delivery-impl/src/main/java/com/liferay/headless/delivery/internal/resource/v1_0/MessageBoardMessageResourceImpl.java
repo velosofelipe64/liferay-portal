@@ -752,8 +752,8 @@ public class MessageBoardMessageResourceImpl
 
 			mbMessage.setAnswer(showAsAnswer);
 
-			return mbMessage;
 		}
+		return mbMessage;
 	}
 
 	private MessageBoardMessage _updateMessageBoardMessage(
@@ -784,7 +784,7 @@ public class MessageBoardMessageResourceImpl
 			messageBoardMessage.getArticleBody(),
 			_createServiceContext(mbMessage.getGroupId(), messageBoardMessage));
 
-		_updateAnswer(mbMessage, messageBoardMessage);
+		mbMessage = _updateAnswer(mbMessage, messageBoardMessage);
 
 		return _toMessageBoardMessage(mbMessage);
 	}
