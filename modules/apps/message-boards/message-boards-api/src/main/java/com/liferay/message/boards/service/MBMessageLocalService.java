@@ -712,10 +712,12 @@ public interface MBMessageLocalService
 	public void unsubscribeMessage(long userId, long messageId)
 		throws PortalException;
 
+	@Indexable(type = IndexableType.REINDEX)
 	public MBMessage updateAnswer(
 			long messageId, boolean answer, boolean cascade)
 		throws PortalException;
 
+	@Indexable(type = IndexableType.REINDEX)
 	public MBMessage updateAnswer(
 			MBMessage message, boolean answer, boolean cascade)
 		throws PortalException;
