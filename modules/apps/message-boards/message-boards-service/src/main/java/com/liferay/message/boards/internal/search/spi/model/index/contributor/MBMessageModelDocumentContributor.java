@@ -114,6 +114,10 @@ public class MBMessageModelDocumentContributor
 				MBMessage::isAnswer
 			));
 
+			document.addKeyword("numberOfMessageBoardMessages",_mbMessageLocalService.getChildMessagesCount(
+				mbMessage.getMessageId(),
+				WorkflowConstants.STATUS_APPROVED));
+
 			document.addKeyword("question", mbThread.isQuestion());
 		}
 

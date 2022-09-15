@@ -67,6 +67,7 @@ public class MessageBoardMessageEntityModel implements EntityModel {
 				"messageBoardSectionId", locale -> Field.CATEGORY_ID),
 			new IntegerEntityField(
 				"messageBoardThreadId", locale -> Field.ROOT_ENTRY_CLASS_PK),
+			new IntegerEntityField("numberOfMessageBoardMessages", locale -> "numberOfMessageBoardMessages"),
 			new IntegerEntityField(
 				"parentMessageBoardMessageId", locale -> "parentMessageId"),
 			new IntegerEntityField(
