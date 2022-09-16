@@ -80,7 +80,8 @@ public class MessageBoardMessageEntityModel implements EntityModel {
 				"headline",
 				locale -> Field.getSortableFieldName(
 					"localized_title_".concat(
-						LocaleUtil.toLanguageId(locale)))));
+						LocaleUtil.toLanguageId(locale)))),
+			new StringEntityField("keywords", locate -> "keywords"));
 	}
 
 	@Override

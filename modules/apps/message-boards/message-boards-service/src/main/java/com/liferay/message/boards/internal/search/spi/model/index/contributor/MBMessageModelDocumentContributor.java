@@ -14,6 +14,8 @@
 
 package com.liferay.message.boards.internal.search.spi.model.index.contributor;
 
+import com.liferay.asset.kernel.model.AssetTag;
+import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.message.boards.model.MBDiscussion;
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
@@ -34,6 +36,7 @@ import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.RelatedEntryIndexer;
 import com.liferay.portal.kernel.search.RelatedEntryIndexerRegistryUtil;
 import com.liferay.portal.kernel.util.HtmlParser;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -119,6 +122,11 @@ public class MBMessageModelDocumentContributor
 				WorkflowConstants.STATUS_APPROVED));
 
 			document.addKeyword("question", mbThread.isQuestion());
+
+			document.addKeyword("keywords", ListUtil.toArray(
+				_assetTagLocalService.getTags(
+					MBMessage.class.getName(), mbMessage.getMessageId()),
+				AssetTag.NAME_ACCESSOR));
 		}
 
 		document.addKeyword("threadId", mbMessage.getThreadId());
@@ -193,5 +201,8 @@ public class MBMessageModelDocumentContributor
 
 	@Reference
 	private MBMessageLocalService _mbMessageLocalService;
+
+	@Reference
+	private AssetTagLocalService _assetTagLocalService;
 
 }
