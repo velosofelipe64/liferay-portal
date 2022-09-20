@@ -42,13 +42,14 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.spi.model.index.contributor.ModelDocumentContributor;
+import com.liferay.ratings.kernel.service.RatingsStatsLocalService;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Stream;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Luan Maoski
@@ -127,6 +128,11 @@ public class MBMessageModelDocumentContributor
 				_assetTagLocalService.getTags(
 					MBMessage.class.getName(), mbMessage.getMessageId()),
 				AssetTag.NAME_ACCESSOR));
+
+			document.addNumber("viewCount", mbThread.getViewCount());
+
+			document.addKeyword("ratingValue", _ratingsStatsLocalService.fetchStats(
+				MBMessage.class.getName(), mbThread.getRootMessageId()).getTotalScore());
 		}
 
 		document.addKeyword("threadId", mbMessage.getThreadId());
@@ -164,6 +170,7 @@ public class MBMessageModelDocumentContributor
 
 	@Reference
 	protected CommentManager commentManager;
+
 
 	@Reference
 	protected MBDiscussionLocalService mbDiscussionLocalService;
@@ -204,5 +211,8 @@ public class MBMessageModelDocumentContributor
 
 	@Reference
 	private AssetTagLocalService _assetTagLocalService;
+
+	@Reference
+	private RatingsStatsLocalService _ratingsStatsLocalService;
 
 }

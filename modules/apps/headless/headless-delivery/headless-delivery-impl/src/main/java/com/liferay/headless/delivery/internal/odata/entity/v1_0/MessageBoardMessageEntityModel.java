@@ -72,7 +72,10 @@ public class MessageBoardMessageEntityModel implements EntityModel {
 				"parentMessageBoardMessageId", locale -> "parentMessageId"),
 			new IntegerEntityField(
 				"ratingValue",
-				locale -> Field.getSortableFieldName("totalScore")),
+				locale -> Field.getSortableFieldName("ratingValue")),
+			new IntegerEntityField(
+				"viewCount",
+				locale -> Field.getSortableFieldName("viewCount")),
 			new StringEntityField(
 				"friendlyUrlPath",
 				locale -> Field.getSortableFieldName("urlSubject_String")),
@@ -80,8 +83,7 @@ public class MessageBoardMessageEntityModel implements EntityModel {
 				"headline",
 				locale -> Field.getSortableFieldName(
 					"localized_title_".concat(
-						LocaleUtil.toLanguageId(locale)))),
-			new StringEntityField("keywords", locate -> "keywords"));
+						LocaleUtil.toLanguageId(locale)))));
 	}
 
 	@Override
