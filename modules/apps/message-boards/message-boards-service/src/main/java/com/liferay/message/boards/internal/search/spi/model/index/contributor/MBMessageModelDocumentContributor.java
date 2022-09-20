@@ -130,9 +130,6 @@ public class MBMessageModelDocumentContributor
 				AssetTag.NAME_ACCESSOR));
 
 			document.addNumber("viewCount", mbThread.getViewCount());
-
-			document.addKeyword("ratingValue", _ratingsStatsLocalService.fetchStats(
-				MBMessage.class.getName(), mbThread.getRootMessageId()).getTotalScore());
 		}
 
 		document.addKeyword("threadId", mbMessage.getThreadId());
