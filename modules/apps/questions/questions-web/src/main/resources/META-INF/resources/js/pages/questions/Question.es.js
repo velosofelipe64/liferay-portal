@@ -12,11 +12,13 @@
  * details.
  */
 
+import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayEmptyState from '@clayui/empty-state';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import classNames from 'classnames';
+import {useManualQuery} from 'graphql-hooks';
 import {useMutation} from 'graphql-hooks';
 import React, {
 	useCallback,
@@ -47,6 +49,7 @@ import TagList from '../../components/TagList.es';
 import {
 	createAnswerQuery,
 	getMessages,
+	getMessagesQuery,
 	getSubscriptionsQuery,
 	getThread,
 	getUserActivityQuery,
@@ -89,6 +92,9 @@ export default withRouter(
 
 		const editorRef = useRef('');
 
+		const [step, setStep] = useState(0);
+		const [isModerate, setIsModerate] = useState(false);
+		const [userAnswers, setUserAnswers] = useState([]);
 		const [isPostButtonDisable, setIsPostButtonDisable] = useState(true);
 		const [showDeleteModalPanel, setShowDeleteModalPanel] = useState(false);
 
@@ -112,6 +118,70 @@ export default withRouter(
 			}
 		}, [question, page, pageSize]);
 
+		const creatorId = context.userId;
+		const siteKey = context.siteKey;
+
+		const [userInfo, setUserInfo] = useState({
+			id: creatorId,
+			image: null,
+			name: decodeURI(
+				JSON.parse(`"${Liferay.ThemeDisplay.getUserName()}"`)
+			),
+			postsNumber: 0,
+			rank: context.defaultRank,
+		});
+
+		const [fetchUserActivity, {data}] = useManualQuery(
+			getUserActivityQuery,
+			{
+				variables: {
+					filter: `creatorId eq ${creatorId}`,
+					page,
+					pageSize,
+					siteKey,
+				},
+			}
+		);
+
+		useEffect(() => {
+			if (!page || !pageSize) {
+				return;
+			}
+
+			setLoading(true);
+
+			fetchUserActivity().then(({data}) => {
+				if (data.messageBoardMessages.items.length) {
+					const {
+						creator,
+						creatorStatistics,
+					} = data.messageBoardMessages.items[0];
+					setUserInfo({
+						id: creator.id,
+						image: creator.image,
+						name: creator.name,
+						postsNumber: creatorStatistics.postsNumber,
+						rank: creatorStatistics.rank,
+					});
+				}
+			});
+		}, [fetchUserActivity, page, pageSize]);
+
+		// Se o usuario ja interagiu alguma vez
+
+		useEffect(() => {
+			if (data) {
+				const userInteractions = data.messageBoardMessages.items;
+
+				const filterOnlyAnswers = userInteractions.filter(
+					(item) =>
+						item.parentMessageBoardMessageId ===
+						question.messageBoardRootMessageId
+				);
+				setUserAnswers(filterOnlyAnswers);
+			}
+		}, [data, question.messageBoardRootMessageId]);
+
 		useEffect(() => {
 			getThread(questionId, context.siteKey)
 				.then(
@@ -129,8 +199,7 @@ export default withRouter(
 							);
 							setError(errorObject);
 							setLoading(false);
-						}
-						else {
+						} else {
 							setQuestion(messageBoardThreadByFriendlyUrlPath);
 							setLoading(false);
 						}
@@ -203,32 +272,51 @@ export default withRouter(
 			[allowSubscription, question, subscribe, setQuestion]
 		);
 
-		const onCreateAnswer = async () => {
-			try {
-				await createAnswer({
-					fetchOptionsOverrides: getContextLink(
-						`${sectionTitle}/${questionId}`
-					),
-					variables: {
-						articleBody: editorRef.current.getContent(),
-						messageBoardThreadId: question.id,
-					},
-				});
+		const onAlertModerate = () => {
+			if (
+				step === 0 &&
+				!!userAnswers.length &&
+				userInfo.postsNumber < context.contributedMessages
+			) {
+				setIsModerate(true);
 
-				editorRef.current.clearContent();
-
-				await onSubscription();
-
-				fetchMessages();
-
-				deleteCacheKey(getUserActivityQuery, {
-					filter: `creatorId eq ${context.userId}`,
-					page: 1,
-					pageSize: 20,
-					siteKey: context.siteKey,
-				});
+				return setStep(1);
 			}
-			catch (error) {}
+
+			return setStep(1);
+		};
+
+		const onCreateAnswer = async () => {
+			if (step === 1) {
+				try {
+					await createAnswer({
+						fetchOptionsOverrides: getContextLink(
+							`${sectionTitle}/${questionId}`
+						),
+						variables: {
+							articleBody: editorRef.current.getContent(),
+							messageBoardThreadId: question.id,
+						},
+					});
+
+					editorRef.current.clearContent();
+
+					await onSubscription();
+
+					fetchMessages();
+
+					deleteCacheKey(getUserActivityQuery, {
+						filter: `creatorId eq ${context.userId}`,
+						page: 1,
+						pageSize: 20,
+						siteKey: context.siteKey,
+					});
+				} catch (error) {
+					return setStep(1);
+				}
+
+				return setIsModerate(false), setStep(0);
+			}
 		};
 
 		const deleteAnswer = useCallback(
@@ -286,6 +374,8 @@ export default withRouter(
 			setIsPageScroll(docHeight > winHeight);
 		}, [question, answers]);
 
+		const lastStep = step === 1;
+
 		return (
 			<section className="questions-section questions-section-single">
 				<Breadcrumb
@@ -316,6 +406,41 @@ export default withRouter(
 							</ClayEmptyState>
 						</div>
 					</div>
+				)}
+
+				{isModerate && (
+					<ClayAlert.ToastContainer>
+						<ClayAlert
+							autoClose={6000}
+							displayType="warning"
+							onClose={() => setIsModerate(false)}
+							title={Liferay.Language.get('confirm-answer')}
+							variant="inline"
+						>
+							<div>
+								{Liferay.Language.get(
+									'are-you-sure-you-want-to-add-another-answer?'
+								)}
+
+								<br />
+
+								{Liferay.Language.get(
+									'you-could-use-the-add-comment-to-continue-the-existing-thread-instead.'
+								)}
+							</div>
+
+							<ClayAlert.Footer>
+								<ClayButton.Group className="ml-0">
+									<ClayButton
+										alert
+										onClick={() => setIsModerate(false)}
+									>
+										Cancel
+									</ClayButton>
+								</ClayButton.Group>
+							</ClayAlert.Footer>
+						</ClayAlert>
+					</ClayAlert.ToastContainer>
 				)}
 
 				<div className="c-mt-5">
@@ -566,27 +691,42 @@ export default withRouter(
 									question.actions &&
 									question.actions['reply-to-thread'] && (
 										<div className="c-mt-5">
-											<DefaultQuestionsEditor
-												label={Liferay.Language.get(
-													'your-answer'
-												)}
-												onContentLengthValid={
-													setIsPostButtonDisable
-												}
-												question={question}
-												ref={editorRef}
-											/>
+											{lastStep && (
+												<>
+													<DefaultQuestionsEditor
+														label={Liferay.Language.get(
+															'your-answer'
+														)}
+														onContentLengthValid={
+															setIsPostButtonDisable
+														}
+														question={question}
+														ref={editorRef}
+													/>
 
-											{!question.subscribed && (
-												<SubscritionCheckbox
-													checked={allowSubscription}
-													setChecked={
-														setAllowSubscription
-													}
-												/>
+													<SubscritionCheckbox
+														checked={
+															allowSubscription
+														}
+														setChecked={
+															setAllowSubscription
+														}
+													/>
+												</>
 											)}
 
-											{!question.locked && (
+											{step === 0 && (
+												<ClayButton
+													displayType="primary"
+													onClick={onAlertModerate}
+												>
+													{Liferay.Language.get(
+														'add-answer'
+													)}
+												</ClayButton>
+											)}
+
+											{!question.locked && lastStep && (
 												<ClayButton
 													disabled={
 														isPostButtonDisable

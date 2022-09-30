@@ -55,6 +55,7 @@ export default withRouter(
 								);
 							});
 						}}
+						lastButton
 						onClose={() => {
 							setDeleteModalVisibility(false);
 						}}

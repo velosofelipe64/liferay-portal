@@ -199,14 +199,14 @@ export default withRouter(
 																			);
 																		}
 																	);
-																}
-																else {
+																} else {
 																	deleteAnswer(
 																		answer
 																	);
 																}
 															});
 														}}
+														lastButton
 														onClose={() => {
 															setShowDeleteAnswerModal(
 																false

@@ -19,6 +19,7 @@ import React from 'react';
 export default function Modal({
 	body,
 	callback,
+	lastButton,
 	onClose,
 	status = 'info',
 	textPrimaryButton = 'Save',
@@ -49,15 +50,17 @@ export default function Modal({
 							</ClayButton>
 						}
 						last={
-							<ClayButton
-								displayType="primary"
-								onClick={() => {
-									callback();
-									close();
-								}}
-							>
-								{textPrimaryButton}
-							</ClayButton>
+							lastButton && (
+								<ClayButton
+									displayType="primary"
+									onClick={() => {
+										callback();
+										close();
+									}}
+								>
+									{textPrimaryButton}
+								</ClayButton>
+							)
 						}
 					/>
 				</ClayModal>
