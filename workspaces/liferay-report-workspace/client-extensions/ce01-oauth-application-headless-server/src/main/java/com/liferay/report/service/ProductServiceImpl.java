@@ -9,6 +9,7 @@ import com.liferay.headless.commerce.admin.catalog.client.resource.v1_0.ProductR
 
 import fr.opensagres.xdocreport.document.json.JSONObject;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
@@ -172,7 +173,13 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
-	private static URL _get
+	private static URL _getURL(String address) {
+		try {
+			return new URL("http://" + address);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	private static final String _protocol = "http";
 	private static final String _sourceAddress = "localhost:8080";
@@ -182,13 +189,13 @@ public class ProductServiceImpl implements ProductService {
 	private static final String _targetClientId = "id-8517d564-8041-f383-4c0d-f32f51e351";
 	private static final String _targetClientSecret = "secret-d44273af-d1b4-8c64-dfa9-d959feaa60";
 
-	private static URL _sourceURL = new URL("http://" + _sourceAddress);
-	private static URL _targetURL = new URL("http://" + _targetAddress);
+	private static URL _sourceURL = _getURL("http://" + _sourceAddress);
+	private static URL _targetURL = _getURL("http://" + _targetAddress);
 
-	private static final String sourceBearerToken = ProductServiceImpl._getOAuthAuthorization(
-			_sourceURL, _sourceClientId, _sourceClientSecret);
-	private static final String targetBearerToken= ProductServiceImpl._getOAuthAuthorization(
-			_targetURL, _targetClientId, _targetClientSecret);
+//	private static final String sourceBearerToken = ProductServiceImpl._getOAuthAuthorization(
+//			_sourceURL, _sourceClientId, _sourceClientSecret);
+//	private static final String targetBearerToken= ProductServiceImpl._getOAuthAuthorization(
+//			_targetURL, _targetClientId, _targetClientSecret);
 
 
 }

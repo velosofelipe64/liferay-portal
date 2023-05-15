@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MarketPlaceController {
 
-//	@GetMapping
-//	public ResponseEntity<Page<Product>> getProducts() {
-//		Page<Product> listProducts = service.findAllPaged();
-//
-//		return ResponseEntity.ok(
-//		).body(
-//			listProducts
-//		);
-//	}
+	@GetMapping
+	public ResponseEntity<Page<Product>> getProducts() {
+		Page<Product> listProducts = service.findAllPaged();
+
+		return ResponseEntity.ok(
+		).body(
+			listProducts
+		);
+	}
 
 	@PostMapping(path = "/product")
 	public ResponseEntity<Void> insertProduct() throws Exception {
