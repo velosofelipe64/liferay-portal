@@ -12,19 +12,18 @@ buildscript {
 		}
 	}
 }
-
-apply plugin: "com.liferay.source.formatter"
+apply plugin: "application"
 apply plugin: "java"
 apply plugin: "org.springframework.boot"
 
 dependencies {
+	compile group: "com.liferay.commerce", name: "com.liferay.headless.commerce.admin.catalog.client", version: "4.0.36"
 	compile group: "fr.opensagres.xdocreport", name: "fr.opensagres.xdocreport.converter.odt.odfdom", version: "2.0.2"
 	compile group: "fr.opensagres.xdocreport", name: "fr.opensagres.xdocreport.document.odt", version: "2.0.2"
 	compile group: "fr.opensagres.xdocreport", name: "fr.opensagres.xdocreport.template.freemarker", version: "2.0.2"
+	compile group: "org.apache.httpcomponents", name: "httpclient", version: "4.5.13"
 	compile group: "org.json", name: "json", version: "20220320"
 	compile group: "org.springframework.boot", name: "spring-boot-starter-web", version: "2.7.3"
-	compile group: 'org.json', name: 'json', version: '20230227'
-	compile group: 'com.liferay.commerce', name: 'com.liferay.headless.commerce.admin.catalog.client', version: '4.0.36'
 }
 
 repositories {
