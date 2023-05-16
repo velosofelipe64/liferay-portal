@@ -14,6 +14,7 @@
 
 package com.liferay.osb.testray.service.impl;
 
+import com.liferay.osb.testray.service.CompareRunsLocalService;
 import com.liferay.osb.testray.service.base.CompareRunsServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 
@@ -30,4 +31,12 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class CompareRunsServiceImpl extends CompareRunsServiceBaseImpl {
+
+	public int getComparison(long runIdA, long runIdB, String statusA, String statusB, Long companyId) {
+
+		return _compareRunsLocalServiceImpl.getComparison( runIdA,  runIdB,  statusA, statusB,  companyId);
+
+	}
+
+	private CompareRunsLocalServiceImpl _compareRunsLocalServiceImpl;
 }

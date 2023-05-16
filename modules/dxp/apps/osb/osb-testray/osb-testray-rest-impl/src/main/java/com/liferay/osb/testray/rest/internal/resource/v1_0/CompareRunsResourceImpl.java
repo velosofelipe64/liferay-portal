@@ -17,7 +17,13 @@ package com.liferay.osb.testray.rest.internal.resource.v1_0;
 import com.liferay.osb.testray.rest.dto.v1_0.CompareRuns;
 import com.liferay.osb.testray.rest.resource.v1_0.CompareRunsResource;
 
+import com.liferay.osb.testray.service.CompareRunsLocalService;
+import com.liferay.osb.testray.service.CompareRunsLocalServiceUtil;
+import com.liferay.osb.testray.service.CompareRunsService;
+import com.liferay.osb.testray.service.impl.CompareRunsServiceImpl;
+import com.liferay.portal.kernel.service.ServiceContext;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -33,6 +39,10 @@ public class CompareRunsResourceImpl extends BaseCompareRunsResourceImpl {
 	public CompareRuns getCompareRuns(Long idTestrayRunA, Long idTestrayRunB)
 		throws Exception {
 
+		long companyId = _serviceContext.getCompanyId();
+
+		_compareRunsServiceImpl.getComparison(idTestrayRunA, idTestrayRunB,"PASSED", "PASSED", companyId);
+
 		return new CompareRuns() {
 			{
 				dueStatuses = new String[] {
@@ -47,4 +57,10 @@ public class CompareRunsResourceImpl extends BaseCompareRunsResourceImpl {
 		};
 	}
 
+
+	@Reference
+	private CompareRunsServiceImpl _compareRunsServiceImpl;
+
+	@Reference
+	private ServiceContext _serviceContext;
 }
