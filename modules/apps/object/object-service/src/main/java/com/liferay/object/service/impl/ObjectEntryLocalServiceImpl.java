@@ -2752,6 +2752,16 @@ public class ObjectEntryLocalServiceImpl
 		}
 	}
 
+	public int dslQueryCount(
+		DSLQuery dslQuery) {
+
+
+		int countValue = objectEntryPersistence.dslQueryCount(dslQuery);
+
+
+		return countValue;
+	}
+
 	private List<Object[]> _list(
 			DSLQuery dslQuery, long objectDefinitionId,
 			Expression<?>[] selectExpressions)
