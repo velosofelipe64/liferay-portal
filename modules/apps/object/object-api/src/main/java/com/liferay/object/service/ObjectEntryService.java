@@ -15,6 +15,7 @@
 package com.liferay.object.service;
 
 import com.liferay.object.model.ObjectEntry;
+import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
@@ -77,6 +78,9 @@ public interface ObjectEntryService extends BaseService {
 	public ObjectEntry deleteObjectEntry(
 			String externalReferenceCode, long companyId, long groupId)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int dslQueryCount(DSLQuery dslQuery);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ObjectEntry fetchObjectEntry(long objectEntryId)

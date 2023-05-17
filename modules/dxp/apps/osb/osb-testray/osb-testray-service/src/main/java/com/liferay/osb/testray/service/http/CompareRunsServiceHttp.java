@@ -52,7 +52,7 @@ public class CompareRunsServiceHttp {
 
 	public static int getComparison(
 		HttpPrincipal httpPrincipal, long runIdA, long runIdB, String statusA,
-		String statusB, Long companyId) {
+		String statusB, long companyId) {
 
 		try {
 			MethodKey methodKey = new MethodKey(
@@ -88,7 +88,7 @@ public class CompareRunsServiceHttp {
 
 	private static final Class<?>[] _getComparisonParameterTypes0 =
 		new Class[] {
-			long.class, long.class, String.class, String.class, Long.class
+			long.class, long.class, String.class, String.class, long.class
 		};
 
 }

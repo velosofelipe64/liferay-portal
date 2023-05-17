@@ -1,0 +1,12 @@
+com/liferay/report/dto/Template.java
+ com.liferay.report.dto.Template
+com/liferay/report/CE01SpringBootApplication.java
+ com.liferay.report.CE01SpringBootApplication
+com/liferay/report/service/ProductService.java
+ com.liferay.report.service.ProductService
+com/liferay/report/CE01RestController.java
+ com.liferay.report.CE01RestController
+com/liferay/report/service/ProductServiceImpl.java
+ com.liferay.report.service.ProductServiceImpl
+com/liferay/report/controllers/MarketPlaceController.java
+ com.liferay.report.controllers.MarketPlaceController

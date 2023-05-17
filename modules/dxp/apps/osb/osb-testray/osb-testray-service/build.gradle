@@ -1,5 +1,5 @@
 buildService {
-	apiDir = "../osb-testaray-api/src/main/java"
+	apiDir = "../osb-testray-api/src/main/java"
 }
 
 dependencies {
@@ -9,4 +9,5 @@ dependencies {
 	compileOnly project(":dxp:apps:osb:osb-testray:osb-testray-api")
 	compileOnly project(":apps:object:object-api")
 	compileOnly project(":core:petra:petra-sql-dsl-api")
+	compileOnly project(":core:petra:petra-function")
 }

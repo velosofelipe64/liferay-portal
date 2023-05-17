@@ -2755,9 +2755,7 @@ public class ObjectEntryLocalServiceImpl
 	public int dslQueryCount(
 		DSLQuery dslQuery) {
 
-
 		int countValue = objectEntryPersistence.dslQueryCount(dslQuery);
-
 
 		return countValue;
 	}

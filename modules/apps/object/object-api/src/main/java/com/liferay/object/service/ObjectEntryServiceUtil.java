@@ -15,6 +15,7 @@
 package com.liferay.object.service;
 
 import com.liferay.object.model.ObjectEntry;
+import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.io.Serializable;
@@ -82,6 +83,10 @@ public class ObjectEntryServiceUtil {
 
 		return getService().deleteObjectEntry(
 			externalReferenceCode, companyId, groupId);
+	}
+
+	public static int dslQueryCount(DSLQuery dslQuery) {
+		return getService().dslQueryCount(dslQuery);
 	}
 
 	public static ObjectEntry fetchObjectEntry(long objectEntryId)

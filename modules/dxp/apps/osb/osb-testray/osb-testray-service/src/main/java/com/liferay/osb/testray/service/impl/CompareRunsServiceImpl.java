@@ -19,6 +19,7 @@ import com.liferay.osb.testray.service.base.CompareRunsServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author José Abelenda
@@ -32,11 +33,12 @@ import org.osgi.service.component.annotations.Component;
 )
 public class CompareRunsServiceImpl extends CompareRunsServiceBaseImpl {
 
-	public int getComparison(long runIdA, long runIdB, String statusA, String statusB, Long companyId) {
+	public int getComparison(long runIdA, long runIdB, String statusA, String statusB, long companyId) {
 
-		return _compareRunsLocalServiceImpl.getComparison( runIdA,  runIdB,  statusA, statusB,  companyId);
+		return compareRunsLocalService.getComparison(runIdA, runIdB, statusA, statusB, companyId);
 
 	}
 
-	private CompareRunsLocalServiceImpl _compareRunsLocalServiceImpl;
+
+
 }

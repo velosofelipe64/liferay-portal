@@ -84,6 +84,13 @@ public class ObjectEntryServiceWrapper
 	}
 
 	@Override
+	public int dslQueryCount(
+		com.liferay.petra.sql.dsl.query.DSLQuery dslQuery) {
+
+		return _objectEntryService.dslQueryCount(dslQuery);
+	}
+
+	@Override
 	public com.liferay.object.model.ObjectEntry fetchObjectEntry(
 			long objectEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {

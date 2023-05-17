@@ -33,6 +33,7 @@ import com.liferay.object.service.persistence.ObjectDefinitionPersistence;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -184,6 +185,10 @@ public class ObjectEntryServiceImpl extends ObjectEntryServiceBaseImpl {
 		}
 
 		return objectEntry;
+	}
+
+	public int dslQueryCount(DSLQuery dslQuery){
+		return objectEntryLocalService.dslQueryCount(dslQuery);
 	}
 
 	@Override

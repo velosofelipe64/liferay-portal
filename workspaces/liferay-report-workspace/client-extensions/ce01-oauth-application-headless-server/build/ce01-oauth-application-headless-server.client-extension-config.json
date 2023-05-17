@@ -1,0 +1,13 @@
+{
+  "com.liferay.oauth2.provider.configuration.OAuth2ProviderApplicationHeadlessServerConfiguration~ce02-oauth-application-headless-server" : {
+    "baseURL" : "${portalURL}/o/ce01-oauth-application-headless-server",
+    "description" : "",
+    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+    "homePageURL" : "https://$[conf:ext.lxc.liferay.com.mainDomain]",
+    "name" : "CE01 OAuth Application Headless Server",
+    "properties" : [ ],
+    "sourceCodeURL" : "",
+    "type" : "oAuthApplicationHeadlessServer",
+    "typeSettings" : [ ]
+  }
+}
