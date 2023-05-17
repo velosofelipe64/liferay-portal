@@ -20,7 +20,6 @@ import com.liferay.osb.testray.rest.resource.v1_0.CompareRunsResource;
 import com.liferay.osb.testray.service.CompareRunsLocalService;
 import com.liferay.osb.testray.service.CompareRunsLocalServiceUtil;
 import com.liferay.osb.testray.service.CompareRunsService;
-import com.liferay.osb.testray.service.impl.CompareRunsServiceImpl;
 import com.liferay.portal.kernel.service.ServiceContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -41,7 +40,7 @@ public class CompareRunsResourceImpl extends BaseCompareRunsResourceImpl {
 
 		long companyId = _serviceContext.getCompanyId();
 
-		_compareRunsServiceImpl.getComparison(idTestrayRunA, idTestrayRunB,"PASSED", "PASSED", companyId);
+		_compareRunsService.getComparison(idTestrayRunA, idTestrayRunB,"PASSED", "PASSED", companyId);
 
 		return new CompareRuns() {
 			{
@@ -59,7 +58,7 @@ public class CompareRunsResourceImpl extends BaseCompareRunsResourceImpl {
 
 
 	@Reference
-	private CompareRunsServiceImpl _compareRunsServiceImpl;
+	private CompareRunsService _compareRunsService;
 
 	@Reference
 	private ServiceContext _serviceContext;

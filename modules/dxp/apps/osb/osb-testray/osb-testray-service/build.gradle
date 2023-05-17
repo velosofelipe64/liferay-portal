@@ -7,4 +7,6 @@ dependencies {
 	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations", version: "1.4.0"
 	compileOnly project(":apps:portal:portal-aop-api")
 	compileOnly project(":dxp:apps:osb:osb-testray:osb-testray-api")
+	compileOnly project(":apps:object:object-api")
+	compileOnly project(":core:petra:petra-sql-dsl-api")
 }

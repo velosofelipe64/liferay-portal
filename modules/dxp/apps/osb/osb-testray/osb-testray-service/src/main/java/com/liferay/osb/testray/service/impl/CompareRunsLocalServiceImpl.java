@@ -23,6 +23,7 @@ import com.liferay.osb.testray.service.base.CompareRunsLocalServiceBaseImpl;
 import com.liferay.petra.sql.dsl.Column;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.Table;
+import com.liferay.petra.sql.dsl.expression.Expression;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.sql.dsl.query.JoinStep;
@@ -67,11 +68,13 @@ public class CompareRunsLocalServiceImpl
 		Column<DynamicObjectDefinitionTable, String> dueStatucColumn =
 			(Column<DynamicObjectDefinitionTable, String>) caseResultDynamicObjectDefinitionTable.getColumn("dueStatus_");
 
-		Predicate predicate1 = runToCaseResultColumn.eq(runIdA).and(dueStatucColumn.eq(statusA));
+		Predicate predicate1 = runToCaseResultColumn.eq(runIdA);
+		Predicate predicate2 = dueStatucColumn.eq(statusA);
 
-		Predicate predicate2 = runToCaseResultColumn.eq(runIdB).and(dueStatucColumn.eq(statusB));
+		Predicate predicate3 = runToCaseResultColumn.eq(runIdB);
+		Predicate predicate4 =  dueStatucColumn.eq(statusB);
 
-		JoinStep genericTable = DSLQueryFactoryUtil.selectDistinct(
+		JoinStep genericQuery = DSLQueryFactoryUtil.selectDistinct(
 			caseXDynamicObjectDefinitionTable
 		).from(caseResultXDynamicObjectDefinitionTable).
 			innerJoinON(caseXDynamicObjectDefinitionTable,
@@ -82,10 +85,15 @@ public class CompareRunsLocalServiceImpl
 					eq(caseResultXDynamicObjectDefinitionTable.getPrimaryKeyColumn())
 			);
 
-		Table table1 = (Table) genericTable.where(predicate1);
+		JoinStep subQuery = (JoinStep) genericQuery.where(predicate1);
 
-		DSLQuery table2 = genericTable.where(predicate2);
+		Table table1 = (Table) subQuery.where(predicate2);
 
+
+		JoinStep subQuery1 = (JoinStep) genericQuery.where(predicate3);
+
+		DSLQuery table2 = subQuery1.where(predicate4);
+//
 		return ObjectEntryLocalServiceUtil.dslQueryCount(
 			DSLQueryFactoryUtil.count().from(
 			table1
