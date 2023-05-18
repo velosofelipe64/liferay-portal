@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -54,15 +55,12 @@ public class CompareRunsLocalServiceImpl
 
 	public int getComparison(long runIdA, long runIdB, String statusA, String statusB, long companyId) {
 
-//		Case Table
 		ObjectDefinition caseObjectDefinition = _getObjectDefinitionByTableName(_CASE, companyId).get(0);
 		DynamicObjectDefinitionTable caseExtensionDynamicTable = _getDynamicObjectDefinitionTable(caseObjectDefinition, true);
 
-// 		CaseResult Table
 		ObjectDefinition caseResultObjectDefinition = _getObjectDefinitionByTableName(_CASE_RESULT, companyId).get(0);
 		DynamicObjectDefinitionTable caseResultExtensionDynamicTable = _getDynamicObjectDefinitionTable(caseResultObjectDefinition, true);
 
-//		CaseResultX Table
 		DynamicObjectDefinitionTable caseResultDynamicTable = _getDynamicObjectDefinitionTable(caseResultObjectDefinition, false);
 
 		Column<DynamicObjectDefinitionTable, Long> runToCaseResultColumn =
@@ -74,7 +72,7 @@ public class CompareRunsLocalServiceImpl
 		Column<DynamicObjectDefinitionTable, Long> caseToCaseResultIdColumn =
 			(Column<DynamicObjectDefinitionTable, Long>) caseResultExtensionDynamicTable.getColumn("r_caseToCaseResult_c_caseId");
 
-		Predicate predicateA = runToCaseResultColumn.eq(runIdA).and(dueStatucColumn.eq(statusA));
+		Predicate predicateA = runToCaseResultColumn.eq(Long.valueOf(runIdA)).and(dueStatucColumn.eq(statusA));
 
 		Predicate predicateB = runToCaseResultColumn.eq(runIdB).and(dueStatucColumn.eq(statusB));
 
@@ -89,24 +87,30 @@ public class CompareRunsLocalServiceImpl
 					eq(caseResultDynamicTable.getPrimaryKeyColumn())
 			);
 
+		Collection<Column<?, ?>> tableTemplate = new ArrayList<Column<?, ?>>() {};
 
-		List<Table> table1 = _objectEntryLocalService.dslQuery(genericQuery.where(predicateA));
+		Column<DynamicObjectDefinitionTable,Long> caseId = (Column<DynamicObjectDefinitionTable,Long>) caseExtensionDynamicTable.getColumn("c_caseId_");
+
+		tableTemplate.add(caseId);
+
+		Table table1 = genericQuery.where(predicateA).as("table1", tableTemplate);
 
 		DSLQuery table2 = genericQuery.where(predicateB);
 
 		return _objectEntryLocalService.dslQueryCount(
 			DSLQueryFactoryUtil.count().from(
-				table1.get(0)
+			table1
 		).where(
-				table1.get(0).getColumn("c_caseId_").in(table2)
+			table1.getColumn("c_caseId_").in(table2)
 		));
+
 	}
 
 	private List<ObjectDefinition> _getObjectDefinitionByTableName(String tableName, Long companyId) {
 
 		DynamicQuery dynamicQuery = _objectDefinitionLocalService.dynamicQuery();
 
-		Criterion criterion = RestrictionsFactoryUtil.eq("dbTableName", tableName);
+		Criterion criterion = RestrictionsFactoryUtil.like("dbTableName", "%" + String.valueOf(companyId) + tableName);
 
 		RestrictionsFactoryUtil.and(criterion, RestrictionsFactoryUtil.eq("companyId", companyId));
 
@@ -137,9 +141,9 @@ public class CompareRunsLocalServiceImpl
 		} 
 	}
 
-	private static String _CASE = "O_20096_Case";
-	private static String _CASE_RESULT = "O_20096_CaseResult";
-	
+	private static String _CASE = "_Case";
+	private static String _CASE_RESULT = "_CaseResult";
+
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
 	@Reference
