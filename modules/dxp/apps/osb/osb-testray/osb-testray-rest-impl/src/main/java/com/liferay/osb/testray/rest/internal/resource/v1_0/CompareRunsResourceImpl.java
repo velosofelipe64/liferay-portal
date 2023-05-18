@@ -38,19 +38,16 @@ public class CompareRunsResourceImpl extends BaseCompareRunsResourceImpl {
 		throws Exception {
 
 
-//		_compareRunsService.getComparison(
-//			idTestrayRunA, idTestrayRunB, "PASSED", "PASSED", contextCompany.getCompanyId());
-
 		String[] dueStatuses = new String[] {
 			"PASSED", "FAILED", "BLOCKED", "TEST FIX", "DNR"
 		};
 
-		int[][] matrix = new int[][]{};
+		int[][] matrix = new int[5][5];
 		int i;
 		int j;
-		for(i = 0; i <= dueStatuses.length; i = i +1) {
+		for(i = 0; i < dueStatuses.length; i = i +1) {
 
-			for(j = 0; j <= dueStatuses.length; j = j +1) {
+			for(j = 0; j < dueStatuses.length; j = j +1) {
 
 				int entry = _compareRunsService.getComparison(idTestrayRunA, idTestrayRunB, dueStatuses[i], dueStatuses[j], contextCompany.getCompanyId());
 				matrix[i][j] = entry;
@@ -62,14 +59,9 @@ public class CompareRunsResourceImpl extends BaseCompareRunsResourceImpl {
 
 		return new CompareRuns() {
 			{
-				dueStatuses = new String[] {
-					"PASSED", "FAILED", "BLOCKED", "TEST FIX", "DNR"
-				};
+				dueStatuses = dueStatuses;
 
-				values = new int[][] {
-					{1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}, {1, 2, 3, 4, 5},
-					{1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}
-				};
+				values = matrix;
 			}
 		};
 	}
