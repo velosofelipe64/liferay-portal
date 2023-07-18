@@ -344,6 +344,10 @@ public class ObjectDefinitionLocalServiceImpl
 			objectDefinitionLocalService.deleteObjectDefinition(
 				objectDefinition);
 		}        
+
+
+
+		
 	}
 
 	@Indexable(type = IndexableType.DELETE)
