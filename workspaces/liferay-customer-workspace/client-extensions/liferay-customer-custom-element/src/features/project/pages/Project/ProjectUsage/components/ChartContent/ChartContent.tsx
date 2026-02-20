@@ -51,6 +51,7 @@ const ChartContent: React.FC<IChartContentProps> = ({
 	maxCount,
 	maxCountText,
 	maxCountUnits = '',
+	percentage,
 	title,
 	usedCount,
 	usedCountUnits = '',
@@ -60,14 +61,14 @@ const ChartContent: React.FC<IChartContentProps> = ({
 		let chartLegend = '##';
 
 		if (displayUsage) {
-			if (usedCount !== undefined && maxCount && maxCount > 0) {
-				const percentage = (usedCount / maxCount) * 100;
+			if (percentage !== undefined) {
+				const percentageValue = parseFloat(percentage);
+
 
 				consumedValue = percentage >= 100 ? 100 : percentage;
 				chartLegend = usedCount.toLocaleString() + usedCountUnits;
 			}
 			else {
-				consumedValue = 0;
 				chartLegend = '-';
 			}
 		}
@@ -81,7 +82,9 @@ const ChartContent: React.FC<IChartContentProps> = ({
 			},
 			{name: '', value: emptySpace},
 		];
+
 	}, [usedCount, usedCountUnits, displayUsage, maxCount]);
+
 
 	return (
 		<div className="align-items-center chart-content d-flex w-100">

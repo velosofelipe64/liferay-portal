@@ -14,6 +14,7 @@ interface IProps {
 	displayUsage?: boolean;
 	maxCount?: number;
 	maxCountUnits?: string;
+	percentage?: string;
 	title: string;
 	usedCount?: number;
 	usedCountUnits?: string;
@@ -23,21 +24,20 @@ const ProgressBarContent: React.FC<IProps> = ({
 	displayUsage,
 	maxCount,
 	maxCountUnits = '',
-	title,
+	percentage,
 	usedCount,
-	usedCountUnits = '',
 }) => {
 	const barPercentage = useMemo(() => {
 		if (displayUsage) {
-			if (usedCount !== undefined && maxCount && maxCount > 0) {
-				return `${(usedCount / maxCount) * 100}%`;
+			if (percentage !== undefined) {
+				return `${percentage}%`;
 			}
 
 			return '0%';
 		}
 
 		return `${Math.random() * 100}%`;
-	}, [displayUsage, maxCount, usedCount]);
+	}, [displayUsage, percentage]);
 
 	const isUnlimited = maxCount !== undefined && maxCount < 0;
 

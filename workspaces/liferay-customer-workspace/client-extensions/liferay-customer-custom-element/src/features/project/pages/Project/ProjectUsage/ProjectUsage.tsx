@@ -90,6 +90,9 @@ const ProjectUsage = () => {
 												maxCountUnits={
 													chartData?.maxCountUnits
 												}
+												percentage={
+													chartData?.percentage
+												}
 												title={chartData?.title}
 												usedCount={chartData?.usedCount}
 												usedCountUnits={
@@ -124,6 +127,7 @@ const ProjectUsage = () => {
 											maxCountUnits={
 												chartData.maxCountUnits
 											}
+											percentage={chartData.percentage}
 											title={chartData.title}
 											usedCount={chartData.usedCount}
 											usedCountUnits={

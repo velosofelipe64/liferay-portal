@@ -19,6 +19,7 @@ interface IData {
 	infoText?: string;
 	maxCount?: number;
 	maxCountUnits?: string;
+	percentage?: string;
 	title: string;
 	usedCount?: number;
 	usedCountUnits?: string;
