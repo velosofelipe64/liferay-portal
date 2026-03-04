@@ -5,22 +5,20 @@
 
 package com.liferay.customer.model;
 
-import com.liferay.customer.constants.ProductConstants;
-import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.Product;
-import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ProductPurchase;
-import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
 
+import com.liferay.customer.constants.ProductConstants;
 import static com.liferay.customer.model.UsageStrategy.createUsageJSONObject;
+import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.Product;
+import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ProductPurchase;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author Felipe Veloso
@@ -150,24 +148,24 @@ public class SaaSUsageStrategy implements UsageStrategy {
         _storageCapacityMax += additionalStorageCapacityDocumentLibraryMax;
 
         if (usageJSONObject != null) {
-            _anonymousPageViewsUsed = usageJSONObject.optLong(
-                "totalAnonymousPageViewsCount");
+            _anonymousPageViewsUsed = usageJSONObject.optBigDecimal(
+                "totalAnonymousPageViewsCount", BigDecimal.ZERO);
             _extensionsCapacityCPUUsed = usageJSONObject.optBigDecimal(
                 "totalClientExtensionsCapacityCPUCount", BigDecimal.ZERO);
             _extensionsCapacityRAMUsed = usageJSONObject.optBigDecimal(
                 "totalClientExtensionsCapacityRAM", BigDecimal.ZERO);
-            _monthlyActiveLoggedInUsersUsed = usageJSONObject.optLong(
-                "totalMonthlyActiveLoggedInUsersCount");
-            _sitesUsed = usageJSONObject.optInt("totalSitesCount");
+            _monthlyActiveLoggedInUsersUsed = usageJSONObject.optBigDecimal(
+                "totalMonthlyActiveLoggedInUsersCount", BigDecimal.ZERO);
+            _sitesUsed = usageJSONObject.optBigDecimal("totalSitesCount", BigDecimal.ZERO);
             _storageCapacityUsed = usageJSONObject.optBigDecimal(
                 "totalStorageCapacityDocumentLibrary", BigDecimal.ZERO);
         }
         else {
-            _anonymousPageViewsUsed = 0;
+            _anonymousPageViewsUsed = BigDecimal.ZERO;
             _extensionsCapacityCPUUsed = BigDecimal.ZERO;
             _extensionsCapacityRAMUsed = BigDecimal.ZERO;
-            _monthlyActiveLoggedInUsersUsed = 0;
-            _sitesUsed = 0;
+            _monthlyActiveLoggedInUsersUsed = BigDecimal.ZERO;
+            _sitesUsed = BigDecimal.ZERO;
             _storageCapacityUsed = BigDecimal.ZERO;
         }
     }
@@ -179,45 +177,45 @@ public class SaaSUsageStrategy implements UsageStrategy {
         jsonObject.put(
             "anonymousPageViews",
             createUsageJSONObject(
-                _anonymousPageViewsUsed, UNIT_GIB, _anonymousPageViewsMax,
+                _anonymousPageViewsUsed, _anonymousPageViewsMax,
                 UNIT_GIB)
         ).put(
             "clientExtensionsCapacityCPU",
             createUsageJSONObject(
-                _format(_extensionsCapacityCPUUsed), UNIT_GIB,
+                _format(_extensionsCapacityCPUUsed),
                 _extensionsCapacityCPUMax, UNIT_GIB)
         ).put(
             "clientExtensionsCapacityRAM",
             createUsageJSONObject(
-                _format(_extensionsCapacityRAMUsed), UNIT_GIB,
+                _format(_extensionsCapacityRAMUsed),
                 _extensionsCapacityRAMMax, UNIT_GIB)
         ).put(
             "monthlyActiveLoggedInUsers",
             createUsageJSONObject(
-                _monthlyActiveLoggedInUsersUsed, UNIT_GIB,
+                _monthlyActiveLoggedInUsersUsed, 
                 _monthlyActiveLoggedInUsersMax, UNIT_GIB)
         ).put(
             "sites",
             createUsageJSONObject(
-                _sitesUsed, UNIT_GIB, _sitesMax, UNIT_GIB)
+                _sitesUsed, _sitesMax, UNIT_GIB)
         ).put(
             "storageCapacityDocumentLibrary",
             createUsageJSONObject(
-                _format(_storageCapacityUsed), UNIT_GIB,
+                _format(_storageCapacityUsed),
                 _storageCapacityMax, UNIT_GIB)
         );
 
         return jsonObject;
     }
 
-    private float _format(BigDecimal bigDecimal) {
+    private BigDecimal _format(BigDecimal bigDecimal) {
         if (bigDecimal != null) {
             return bigDecimal.setScale(
                 2, RoundingMode.DOWN
-            ).floatValue();
+            );
         }
 
-        return BigDecimal.ZERO.floatValue();
+        return BigDecimal.ZERO;
     }
 
     private long _getAnonymousPageViewsMax(String name) {
@@ -284,15 +282,15 @@ public class SaaSUsageStrategy implements UsageStrategy {
     }
 
     private final long _anonymousPageViewsMax;
-    private final long _anonymousPageViewsUsed;
+    private final BigDecimal _anonymousPageViewsUsed;
     private int _extensionsCapacityCPUMax;
     private final BigDecimal _extensionsCapacityCPUUsed;
     private int _extensionsCapacityRAMMax;
     private final BigDecimal _extensionsCapacityRAMUsed;
     private final long _monthlyActiveLoggedInUsersMax;
-    private final long _monthlyActiveLoggedInUsersUsed;
+    private final BigDecimal _monthlyActiveLoggedInUsersUsed;
     private int _sitesMax;
-    private final int _sitesUsed;
+    private final BigDecimal _sitesUsed;
     private int _storageCapacityMax;
     private final BigDecimal _storageCapacityUsed;
 

@@ -5,21 +5,18 @@
 
 package com.liferay.customer.model;
 
-import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.Product;
-import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ProductPurchase;
-import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
 
 import static com.liferay.customer.model.UsageStrategy.createUsageJSONObject;
+import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.Product;
+import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ProductPurchase;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author Felipe Veloso
@@ -72,41 +69,36 @@ public class ExperienceUsageStrategy implements UsageStrategy {
         if (usageJSONObject != null) {
             usageJSONObject = usageJSONObject.getJSONObject("usage");
 
-            _databaseCapacityUsed = _convert(
+            _databaseCapacityUsed = 
                 usageJSONObject.optBigDecimal(
-                    "databaseStorage", BigDecimal.ZERO),
-                _METRIC_DATABASE_STORAGE);
+                    "databaseStorage", BigDecimal.ZERO);
 
-            _extensionsCapacityCPUUsed = usageJSONObject.optInt(
-                "clientExtensionsCPU", 0);
+            _extensionsCapacityCPUUsed = usageJSONObject.optBigDecimal(
+                "clientExtensionsCPU", BigDecimal.ZERO);
 
-            _extensionsCapacityRAMUsed = _convert(
+            _extensionsCapacityRAMUsed =
                 usageJSONObject.optBigDecimal(
-                    "clientExtensionsRAM", BigDecimal.ZERO),
-                _METRIC_CLIENT_EXTENSIONS_RAM);
+                    "clientExtensionsRAM", BigDecimal.ZERO);
 
-            _logCapacityUsed = _convert(
+            _logCapacityUsed = 
                 usageJSONObject.optBigDecimal(
-                    "logStorage", BigDecimal.ZERO),
-                _METRIC_LOG_STORAGE);
+                    "logStorage", BigDecimal.ZERO);
 
-            _networkingCapacityUsed = _convert(
+            _networkingCapacityUsed = 
                 usageJSONObject.optBigDecimal(
-                    "networkTraffic", BigDecimal.ZERO),
-                _METRIC_NETWORK_TRAFFIC);
+                    "networkTraffic", BigDecimal.ZERO);
 
-            _storageCapacityUsed = _convert(
+            _storageCapacityUsed =
                 usageJSONObject.optBigDecimal(
-                    "documentLibraryAndBackupStorage", BigDecimal.ZERO),
-                _METRIC_STORAGE);
+                    "documentLibraryAndBackupStorage", BigDecimal.ZERO);
         }
         else {
-            _databaseCapacityUsed = 0;
-            _extensionsCapacityCPUUsed = 0;
-            _extensionsCapacityRAMUsed = 0;
-            _logCapacityUsed = 0;
-            _networkingCapacityUsed = 0;
-            _storageCapacityUsed = 0;
+            _databaseCapacityUsed = BigDecimal.ZERO;
+            _extensionsCapacityCPUUsed = BigDecimal.ZERO;
+            _extensionsCapacityRAMUsed = BigDecimal.ZERO;
+            _logCapacityUsed = BigDecimal.ZERO;
+            _networkingCapacityUsed = BigDecimal.ZERO;
+            _storageCapacityUsed = BigDecimal.ZERO;
         }
     }
 
@@ -117,93 +109,60 @@ public class ExperienceUsageStrategy implements UsageStrategy {
         return jsonObject.put(
             "clientExtensionsCPU",
             createUsageJSONObject(
-                _extensionsCapacityCPUUsed, StringPool.BLANK,
+                _extensionsCapacityCPUUsed,
                 _extensionsCapacityCPUMax, StringPool.BLANK)
         ).put(
             "clientExtensionsRAM",
             createUsageJSONObject(
-                _extensionsCapacityRAMUsed,
-                _usageUnits.get(_METRIC_CLIENT_EXTENSIONS_RAM),
+                _convert(_extensionsCapacityRAMUsed),
                 _extensionsCapacityRAMMax, UNIT_GIB)
         ).put(
             "databaseStorage",
             createUsageJSONObject(
-                _databaseCapacityUsed,
-                _usageUnits.get(_METRIC_DATABASE_STORAGE),
+                _convert(_databaseCapacityUsed),
                 _databaseCapacityMax, UNIT_TIB)
         ).put(
             "documentLibraryAndBackupStorage",
             createUsageJSONObject(
-                _storageCapacityUsed, _usageUnits.get(_METRIC_STORAGE),
+                _convert(_storageCapacityUsed),
                 _storageCapacityMax, UNIT_GIB)
         ).put(
             "logStorage",
             createUsageJSONObject(
-                _logCapacityUsed, _usageUnits.get(_METRIC_LOG_STORAGE),
+                _convert(_logCapacityUsed),
                 _logCapacityMax, UNIT_GIB)
         ).put(
             "networkTraffic",
             createUsageJSONObject(
-                _networkingCapacityUsed,
-                _usageUnits.get(_METRIC_NETWORK_TRAFFIC),
+                _convert(_networkingCapacityUsed),
                 _networkingCapacityMax, _networkingCapacityUnit)
         );
     }
 
-    private float _convert(BigDecimal bigDecimal, String metric) {
-        if (bigDecimal != null) {
-            String unit = UNIT_GIB;
+    private BigDecimal _convert(BigDecimal bigDecimal) {
 
-            BigDecimal divisorGB = new BigDecimal(1024L * 1024L * 1024L);
+        BigDecimal divisorGB = new BigDecimal(1024L * 1024L * 1024L);
 
-            bigDecimal = bigDecimal.divide(divisorGB);
+        bigDecimal.divide(divisorGB);
 
-            if (bigDecimal.compareTo(new BigDecimal("1024")) >= 0) {
-                bigDecimal = bigDecimal.divide(new BigDecimal(1024));
-                unit = UNIT_TIB;
-            }
+        return bigDecimal.setScale(
+					2, RoundingMode.DOWN
+				);
 
-            _setUsageUnit(metric, unit);
-
-            return bigDecimal.setScale(
-                2, RoundingMode.DOWN
-            ).floatValue();
-        }
-
-        return BigDecimal.ZERO.floatValue();
     }
-
-    private void _setUsageUnit(String metric, String unit) {
-        _usageUnits.put(metric, unit);
-    }
-
-    private static final String _METRIC_CLIENT_EXTENSIONS_RAM =
-        "clientExtensionsRAMMetric";
-
-    private static final String _METRIC_DATABASE_STORAGE =
-        "databaseStorageMetric";
-
-    private static final String _METRIC_LOG_STORAGE = "logStorageMetric";
-
-    private static final String _METRIC_NETWORK_TRAFFIC =
-        "networkTrafficMetric";
-
-    private static final String _METRIC_STORAGE =
-        "documentLibraryAndBackupStorageMetric";
 
     private final int _databaseCapacityMax;
-    private final float _databaseCapacityUsed;
+    private final BigDecimal _databaseCapacityUsed;
     private final int _extensionsCapacityCPUMax;
-    private final int _extensionsCapacityCPUUsed;
+    private final BigDecimal _extensionsCapacityCPUUsed;
     private final int _extensionsCapacityRAMMax;
-    private final float _extensionsCapacityRAMUsed;
+    private final BigDecimal _extensionsCapacityRAMUsed;
     private final long _logCapacityMax;
-    private final float _logCapacityUsed;
+    private final BigDecimal _logCapacityUsed;
     private final int _networkingCapacityMax;
     private String _networkingCapacityUnit = UNIT_GIB;
-    private final float _networkingCapacityUsed;
+    private final BigDecimal _networkingCapacityUsed;
     private final int _storageCapacityMax;
-    private final float _storageCapacityUsed;
-    private final Map<String, String> _usageUnits = new HashMap<>();
+    private final BigDecimal _storageCapacityUsed;
 
 }

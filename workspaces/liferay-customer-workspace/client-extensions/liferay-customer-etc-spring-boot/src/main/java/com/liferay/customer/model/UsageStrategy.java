@@ -5,7 +5,12 @@
 
 package com.liferay.customer.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.json.JSONObject;
+
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Felipe Veloso
@@ -15,13 +20,28 @@ interface UsageStrategy {
     public JSONObject toJSONObject();
 
     public static JSONObject createUsageJSONObject(
-        float usedCount, String usedCountUnit, long maxCount,
+        BigDecimal usedCount, long maxCount,
         String maxCountUnit) {
 
-        float dividend = usedCount;
+        String usedCountUnit = UNIT_GIB;
+
+        if(Validator.isNull(maxCountUnit)) {
+            usedCountUnit = maxCountUnit;
+        }
+
+        if (usedCount.compareTo(new BigDecimal("1024")) >= 0) {
+            usedCount = usedCount.divide(new BigDecimal(1024));
+            usedCountUnit = UNIT_TIB;
+        }
+
+        float usageCountFloat = usedCount.setScale(
+            2, RoundingMode.DOWN
+        ).floatValue();
+
+        float dividend = usageCountFloat;
 
         if (!usedCountUnit.equals(maxCountUnit)) {
-            dividend = usedCount / 1024;
+            dividend = usageCountFloat / 1024;
         }
 
         float percentage = 0;
@@ -39,7 +59,7 @@ interface UsageStrategy {
         ).put(
             "percentage", percentage
         ).put(
-            "usedCount", usedCount
+            "usedCount", usageCountFloat
         ).put(
             "usedCountUnits", usedCountUnit
         );
