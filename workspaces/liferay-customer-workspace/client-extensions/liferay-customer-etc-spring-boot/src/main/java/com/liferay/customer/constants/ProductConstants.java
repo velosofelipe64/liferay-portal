@@ -41,7 +41,7 @@ public class ProductConstants {
 	public static final String NAME_PRODUCTION_ENVIRONMENT =
 		"Production Environment";
 
-	public static final String[] NAMES_PLAN_SUBSCRIPTION = {
+	public static final String[] SAAS_PLAN_SUBSCRIPTION_NAMES = {
 		NAME_LIFERAY_SAAS_BUSINESS_PLAN, NAME_LIFERAY_SAAS_ENTERPRISE_PLAN,
 		NAME_LIFERAY_SAAS_PRO_PLAN
 	};

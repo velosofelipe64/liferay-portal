@@ -246,7 +246,7 @@ public class AccountsRestController extends BaseRestController {
 			String name = product.getName();
 
 			if (ArrayUtil.contains(
-					ProductConstants.NAMES_PLAN_SUBSCRIPTION, name)) {
+					ProductConstants.SAAS_PLAN_SUBSCRIPTION_NAMES, name)) {
 
 				return new AccountUsage(
 					productPurchases,
