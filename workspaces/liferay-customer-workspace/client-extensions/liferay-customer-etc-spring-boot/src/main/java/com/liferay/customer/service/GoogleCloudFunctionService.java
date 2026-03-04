@@ -5,6 +5,19 @@
 
 package com.liferay.customer.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
@@ -14,23 +27,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.IdTokenCredentials;
 import com.google.auth.oauth2.IdTokenProvider;
 import com.google.common.io.CharStreams;
-
 import com.liferay.petra.string.StringBundler;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import java.nio.charset.StandardCharsets;
-
-import org.json.JSONObject;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Felipe Franca
@@ -43,22 +40,56 @@ public class GoogleCloudFunctionService {
 	public JSONObject fetchCustomerAccountUsage(String accountKey)
 		throws Exception {
 
-		return _handleRequest(
-			StringBundler.concat(
-				_gcfBaseUrl, _FUNCTION_CUSTOMER_USAGE_API_PATH,
-				"/api/v1/customer/usage/accounts/", accountKey),
-			accountKey);
+		JSONObject root = new JSONObject();
+
+		// String values
+
+		root.put("koroneikiAccountId", "KOR-12345");
+
+		// Integer/Long values for counts
+
+		root.put("totalAnonymousPageViewsCount", 12345L);
+		root.put("totalMonthlyActiveLoggedInUsersCount", 12345L);
+		root.put("totalSitesCount", 1);
+
+		// Double values for capacities and storage
+		// Note: Using decimals to match your requested format
+
+		root.put("totalClientExtensionsCapacityCPUCount", 0);
+		root.put("totalClientExtensionsCapacityRAM", 1.34f);
+		root.put("totalStorageCapacityDocumentLibrary", 1.34f);
+
+		return root;
 	}
 
 	@Cacheable("accountUsage")
 	public JSONObject fetchCustomerAccountUsage(String accountKey, String month)
 		throws Exception {
 
-		return _handleRequest(
-			StringBundler.concat(
-				_gcfBaseUrl, _FUNCTION_CUSTOMER_USAGE_API_PATH,
-				"/api/v1/accounts/", accountKey, "/usage/month/", month),
-			accountKey);
+		JSONObject root = new JSONObject();
+
+		root.put("accountKey", "KOR-12345");
+		root.put("month", "2025-01");
+
+		// 2. Create the nested 'usage' object
+
+		JSONObject usage = new JSONObject();
+
+		// Note: Using 'L' for Long values to handle large byte counts
+
+		usage.put("clientExtensionsCPU", 4.0);
+		usage.put("clientExtensionsRAM", 1073741824.0f);
+		usage.put("databaseStorage", 1073741824.0f);
+		usage.put("documentLibraryAndBackupStorage", 1073741824.0f);
+		usage.put("logStorage", 1073741824.0f);
+		usage.put("networkTraffic", 1073741824.0f);
+
+		// 3. Assemble and add the timestamp
+
+		root.put("updatedAt", "2025-01-31T23:59:59Z");
+		root.put("usage", usage);
+
+		return root;
 	}
 
 	@CacheEvict(allEntries = true, value = "accountUsage")

@@ -141,25 +141,26 @@ public class SaaSUsageStrategy implements UsageStrategy {
 		_storageCapacityMax += additionalStorageCapacityDocumentLibraryMax;
 
 		if (usageJSONObject != null) {
-			_anonymousPageViewsUsed = usageJSONObject.optLong(
-				"totalAnonymousPageViewsCount");
+			_anonymousPageViewsUsed = usageJSONObject.optBigDecimal(
+				"totalAnonymousPageViewsCount", BigDecimal.ZERO);
 			_extensionsCapacityCPUUsed = usageJSONObject.optBigDecimal(
 				"totalClientExtensionsCapacityCPUCount", BigDecimal.ZERO);
-			_extensionsCapacityRAMUsed = usageJSONObject.optBigDecimal(
+			_extensionsCapacityRAMUsedGigaBytes = usageJSONObject.optBigDecimal(
 				"totalClientExtensionsCapacityRAM", BigDecimal.ZERO);
-			_monthlyActiveLoggedInUsersUsed = usageJSONObject.optLong(
-				"totalMonthlyActiveLoggedInUsersCount");
-			_sitesUsed = usageJSONObject.optInt("totalSitesCount");
-			_storageCapacityUsed = usageJSONObject.optBigDecimal(
+			_monthlyActiveLoggedInUsersUsed = usageJSONObject.optBigDecimal(
+				"totalMonthlyActiveLoggedInUsersCount", BigDecimal.ZERO);
+			_sitesUsed = usageJSONObject.optBigDecimal(
+				"totalSitesCount", BigDecimal.ZERO);
+			_storageCapacityUsedGigaBytes = usageJSONObject.optBigDecimal(
 				"totalStorageCapacityDocumentLibrary", BigDecimal.ZERO);
 		}
 		else {
-			_anonymousPageViewsUsed = 0;
+			_anonymousPageViewsUsed = BigDecimal.ZERO;
 			_extensionsCapacityCPUUsed = BigDecimal.ZERO;
-			_extensionsCapacityRAMUsed = BigDecimal.ZERO;
-			_monthlyActiveLoggedInUsersUsed = 0;
-			_sitesUsed = 0;
-			_storageCapacityUsed = BigDecimal.ZERO;
+			_extensionsCapacityRAMUsedGigaBytes = BigDecimal.ZERO;
+			_monthlyActiveLoggedInUsersUsed = BigDecimal.ZERO;
+			_sitesUsed = BigDecimal.ZERO;
+			_storageCapacityUsedGigaBytes = BigDecimal.ZERO;
 		}
 	}
 
@@ -170,45 +171,43 @@ public class SaaSUsageStrategy implements UsageStrategy {
 		jsonObject.put(
 			"anonymousPageViews",
 			UsageStrategy.createUsageJSONObject(
-				_anonymousPageViewsUsed, StringPool.BLANK,
-				_anonymousPageViewsMax, StringPool.BLANK)
+				_anonymousPageViewsUsed, _anonymousPageViewsMax,
+				StringPool.BLANK)
 		).put(
 			"clientExtensionsCapacityCPU",
 			UsageStrategy.createUsageJSONObject(
-				_format(_extensionsCapacityCPUUsed), StringPool.BLANK,
-				_extensionsCapacityCPUMax, StringPool.BLANK)
+				_format(_extensionsCapacityCPUUsed), _extensionsCapacityCPUMax,
+				StringPool.BLANK)
 		).put(
 			"clientExtensionsCapacityRAM",
 			UsageStrategy.createUsageJSONObject(
-				_format(_extensionsCapacityRAMUsed), UNIT_GIB,
+				_format(_extensionsCapacityRAMUsedGigaBytes),
 				_extensionsCapacityRAMMax, UNIT_GIB)
 		).put(
 			"monthlyActiveLoggedInUsers",
 			UsageStrategy.createUsageJSONObject(
-				_monthlyActiveLoggedInUsersUsed, StringPool.BLANK,
-				_monthlyActiveLoggedInUsersMax, StringPool.BLANK)
+				_monthlyActiveLoggedInUsersUsed, _monthlyActiveLoggedInUsersMax,
+				StringPool.BLANK)
 		).put(
 			"sites",
 			UsageStrategy.createUsageJSONObject(
-				_sitesUsed, StringPool.BLANK, _sitesMax, StringPool.BLANK)
+				_sitesUsed, _sitesMax, StringPool.BLANK)
 		).put(
 			"storageCapacityDocumentLibrary",
 			UsageStrategy.createUsageJSONObject(
-				_format(_storageCapacityUsed), UNIT_GIB, _storageCapacityMax,
+				_format(_storageCapacityUsedGigaBytes), _storageCapacityMax,
 				UNIT_GIB)
 		);
 
 		return jsonObject;
 	}
 
-	private float _format(BigDecimal bigDecimal) {
+	private BigDecimal _format(BigDecimal bigDecimal) {
 		if (bigDecimal != null) {
-			return bigDecimal.setScale(
-				2, RoundingMode.DOWN
-			).floatValue();
+			return bigDecimal.setScale(2, RoundingMode.DOWN);
 		}
 
-		return BigDecimal.ZERO.floatValue();
+		return BigDecimal.ZERO;
 	}
 
 	private long _getAnonymousPageViewsMax(String name) {
@@ -272,16 +271,16 @@ public class SaaSUsageStrategy implements UsageStrategy {
 	}
 
 	private final long _anonymousPageViewsMax;
-	private final long _anonymousPageViewsUsed;
+	private final BigDecimal _anonymousPageViewsUsed;
 	private int _extensionsCapacityCPUMax;
 	private final BigDecimal _extensionsCapacityCPUUsed;
 	private int _extensionsCapacityRAMMax;
-	private final BigDecimal _extensionsCapacityRAMUsed;
+	private final BigDecimal _extensionsCapacityRAMUsedGigaBytes;
 	private final long _monthlyActiveLoggedInUsersMax;
-	private final long _monthlyActiveLoggedInUsersUsed;
+	private final BigDecimal _monthlyActiveLoggedInUsersUsed;
 	private int _sitesMax;
-	private final int _sitesUsed;
+	private final BigDecimal _sitesUsed;
 	private int _storageCapacityMax;
-	private final BigDecimal _storageCapacityUsed;
+	private final BigDecimal _storageCapacityUsedGigaBytes;
 
 }
