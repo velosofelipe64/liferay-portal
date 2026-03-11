@@ -122,13 +122,8 @@ public class ExperienceUsageStrategy extends BaseUsageStrategy {
 	}
 
 	private BigDecimal _convertToGigaBytes(long bytes) {
-		return new BigDecimal(
-			bytes
-		).divide(
-			_GIB_DIVISOR
-		).setScale(
-			2, RoundingMode.DOWN
-		);
+		return new BigDecimal(bytes).divide(
+			_GIB_DIVISOR, 10, RoundingMode.HALF_UP);
 	}
 
 	private static final BigDecimal _GIB_DIVISOR = new BigDecimal(

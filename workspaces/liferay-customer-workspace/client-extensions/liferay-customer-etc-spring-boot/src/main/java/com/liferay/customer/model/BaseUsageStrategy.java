@@ -57,7 +57,7 @@ public abstract class BaseUsageStrategy implements UsageStrategy {
 		).put(
 			"usedCount",
 			usedCount.setScale(
-				2, RoundingMode.DOWN
+				4, RoundingMode.DOWN
 			).floatValue()
 		).put(
 			"usedCountUnits", usedCountUnit
