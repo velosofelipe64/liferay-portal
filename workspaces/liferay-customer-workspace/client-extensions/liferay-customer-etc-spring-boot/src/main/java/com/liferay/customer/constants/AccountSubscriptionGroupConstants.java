@@ -47,11 +47,12 @@ public class AccountSubscriptionGroupConstants {
 
 	public static final int ORDER_DEFAULT = 100000;
 
-	public static final Map<String, Integer> menuOrders = Map.of(
+	public static final Map<String, Integer> MENU_ORDERS = Map.of(
 		NAME_LIFERAY_CLOUD, 100, NAME_COMMERCE_FOR_CLOUD, 200,
 		NAME_LIFERAY_SELF_HOSTED, 300, NAME_ANALYTICS_CLOUD, 400, NAME_COMMERCE,
 		500, NAME_ENTERPRISE_SEARCH, 600, NAME_PORTAL, 700);
-	public static final Map<String, Integer> tabOrders = Map.of(
+
+	public static final Map<String, Integer> TAB_ORDERS = Map.of(
 		NAME_PARTNERSHIP, 100, NAME_LIFERAY_CLOUD, 200, NAME_COMMERCE_FOR_CLOUD,
 		400, NAME_LIFERAY_SELF_HOSTED, 500, NAME_ANALYTICS_CLOUD, 600,
 		NAME_COMMERCE, 700, NAME_ENTERPRISE_SEARCH, 800, NAME_PORTAL, 900);

@@ -35,13 +35,13 @@ public class AccountSubscription {
 
 		this.accountKey = accountKey;
 
-		displayGroupName = displayGroupName.toLowerCase(
+		String groupNameFormatted = displayGroupName.toLowerCase(
 		).replace(
 			StringPool.SPACE, StringPool.DASH
 		);
 
-		accountSubscriptionGroupExternalReferenceCode =
-			accountKey + StringPool.UNDERLINE + displayGroupName;
+		accountSubscriptionGroupERC =
+			accountKey + StringPool.UNDERLINE + groupNameFormatted;
 
 		for (ProductPurchase productPurchase : productPurchases) {
 			if (Validator.isNull(productKey)) {
@@ -55,7 +55,7 @@ public class AccountSubscription {
 				productKey = product.getKey();
 
 				externalReferenceCode =
-					accountSubscriptionGroupExternalReferenceCode +
+					accountSubscriptionGroupERC +
 						StringPool.UNDERLINE + productKey;
 			}
 
@@ -78,12 +78,6 @@ public class AccountSubscription {
 				 upcomingStartDate.after(newStartDate))) {
 
 				upcomingStartDate = newStartDate;
-			}
-
-			if ((endDate == null) ||
-				((newEndDate != null) && endDate.before(newEndDate))) {
-
-				endDate = newEndDate;
 			}
 
 			if ((originalEndDate == null) ||
@@ -140,7 +134,7 @@ public class AccountSubscription {
 			"accountKey", accountKey
 		).put(
 			"accountSubscriptionGroupERC",
-			accountSubscriptionGroupExternalReferenceCode
+			accountSubscriptionGroupERC
 		);
 
 		if (originalEndDate != null) {
@@ -173,30 +167,29 @@ public class AccountSubscription {
 		return jsonObject;
 	}
 
-	public String accountKey;
-	public String accountSubscriptionGroupExternalReferenceCode;
-	public Date endDate;
-	public String externalReferenceCode;
-	public int instanceSize;
-	public String name;
-	public Date originalEndDate;
-	public String productKey;
-	public Date startDate;
-	public String status;
-	public Date upcomingStartDate;
+	private String accountKey;
+	private String accountSubscriptionGroupERC;
+	private String externalReferenceCode;
+	private int instanceSize;
+	private String name;
+	private Date originalEndDate;
+	private String productKey;
+	private Date startDate;
+	private String status;
+	private Date upcomingStartDate;
 
 	private String _getStatus(Date endDate, Date startDate) {
 		Date now = new Date();
 
 		if ((endDate != null) && endDate.before(now)) {
-			return "Expired";
+			return AccountSubscriptionConstants.STATUS_EXPIRED;
 		}
 
 		if ((startDate != null) && startDate.after(now)) {
-			return "Future";
+			return AccountSubscriptionConstants.STATUS_FUTURE;
 		}
 
-		return "Active";
+		return AccountSubscriptionConstants.STATUS_ACTIVE;
 	}
 
 	private int _parseSize(String size) {

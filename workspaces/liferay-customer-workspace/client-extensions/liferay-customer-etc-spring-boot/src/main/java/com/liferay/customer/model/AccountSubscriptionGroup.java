@@ -31,16 +31,14 @@ import org.json.JSONObject;
 public class AccountSubscriptionGroup {
 
 	public AccountSubscriptionGroup(
-			String name, List<ProductPurchase> productPurchases,
-			String accountKey, ExternalLink[] externalLinks,
-			String manageUrlLiferayPaas)
-		throws Exception {
+		String name, List<ProductPurchase> productPurchases, String accountKey,
+		ExternalLink[] externalLinks, String liferayPaasManageContactURL) {
 
 		this.name = name;
 		this.accountKey = accountKey;
 		this.externalLinks = externalLinks;
 
-		_manageUrlLiferayPaas = manageUrlLiferayPaas;
+		_liferayPaasManageContactURL = liferayPaasManageContactURL;
 
 		externalReferenceCode = _getExternalReferenceCode();
 
@@ -71,10 +69,9 @@ public class AccountSubscriptionGroup {
 		for (Map.Entry<String, List<ProductPurchase>> entry :
 				productPurchasesMap.entrySet()) {
 
-			accountSubscriptionsMap.computeIfAbsent(
+			accountSubscriptionsMap.put(
 				entry.getKey(),
-				k -> new AccountSubscription(
-					accountKey, name, entry.getValue()));
+				new AccountSubscription(accountKey, name, entry.getValue()));
 		}
 
 		if (activationProductNames.contains(
@@ -88,6 +85,18 @@ public class AccountSubscriptionGroup {
 				AccountSubscriptionGroupConstants.
 					ACTIVATION_PRODUCT_NAME_CLOUD_NATIVE);
 		}
+	}
+
+	public JSONArray getAccountSubscriptionsJSONArray() {
+		JSONArray jsonArray = new JSONArray();
+
+		for (AccountSubscription accountSubscription :
+				accountSubscriptionsMap.values()) {
+
+			jsonArray.put(accountSubscription.toJSONObject());
+		}
+
+		return jsonArray;
 	}
 
 	public JSONObject toJSONObject() {
@@ -106,8 +115,6 @@ public class AccountSubscriptionGroup {
 		}
 
 		jsonObject.put(
-			"accountSubscriptions", _getAccountSubscriptionJSONArray()
-		).put(
 			"activationProductName", activationProductName
 		).put(
 			"externalReferenceCode", externalReferenceCode
@@ -116,7 +123,7 @@ public class AccountSubscriptionGroup {
 			ArrayUtil.contains(
 				AccountSubscriptionGroupConstants.NAMES_ACTIVATION, name)
 		).put(
-			"manageContactsURL", _getManageURLs()
+			"manageContactsURL", _getManageContactsURL()
 		).put(
 			"menuOrder", _getMenuOrder()
 		).put(
@@ -131,25 +138,13 @@ public class AccountSubscriptionGroup {
 		return jsonObject;
 	}
 
-	public String accountKey;
-	public Map<String, AccountSubscription> accountSubscriptionsMap =
+	private String accountKey;
+	private Map<String, AccountSubscription> accountSubscriptionsMap =
 		new HashMap<>();
-	public Set<String> activationProductNames = new TreeSet<>();
-	public ExternalLink[] externalLinks;
-	public String externalReferenceCode;
-	public String name;
-
-	private JSONArray _getAccountSubscriptionJSONArray() {
-		JSONArray jsonArray = new JSONArray();
-
-		for (AccountSubscription accountSubscription :
-				accountSubscriptionsMap.values()) {
-
-			jsonArray.put(accountSubscription.toJSONObject());
-		}
-
-		return jsonArray;
-	}
+	private Set<String> activationProductNames = new TreeSet<>();
+	private ExternalLink[] externalLinks;
+	private String externalReferenceCode;
+	private String name;
 
 	private String _getExternalLinkURL(
 		ExternalLink[] externalLinks, String domain, String entityName) {
@@ -178,13 +173,13 @@ public class AccountSubscriptionGroup {
 		return accountKey + StringPool.UNDERLINE + nameFormatted;
 	}
 
-	private String _getManageURLs() {
-		JSONObject manageURLsJSONObject = new JSONObject();
+	private String _getManageContactsURL() {
+		JSONObject manageContactsURLJSONObject = new JSONObject();
 
 		if (name.equals(
 				AccountSubscriptionGroupConstants.NAME_ANALYTICS_CLOUD)) {
 
-			manageURLsJSONObject.put(
+			manageContactsURLJSONObject.put(
 				name,
 				_getExternalLinkURL(
 					externalLinks, ExternalLinkDomain.ANALYTICS_CLOUD,
@@ -197,17 +192,17 @@ public class AccountSubscriptionGroup {
 					AccountSubscriptionGroupConstants.
 						ACTIVATION_PRODUCT_NAME_LIFERAY_PAAS)) {
 
-				manageURLsJSONObject.put(
+				manageContactsURLJSONObject.put(
 					AccountSubscriptionGroupConstants.
 						ACTIVATION_PRODUCT_NAME_LIFERAY_PAAS,
-					_manageUrlLiferayPaas);
+					_liferayPaasManageContactURL);
 			}
 
 			if (activationProductNames.contains(
 					AccountSubscriptionGroupConstants.
 						ACTIVATION_PRODUCT_NAME_LIFERAY_SAAS)) {
 
-				manageURLsJSONObject.put(
+				manageContactsURLJSONObject.put(
 					AccountSubscriptionGroupConstants.
 						ACTIVATION_PRODUCT_NAME_LIFERAY_SAAS,
 					_getExternalLinkURL(
@@ -216,12 +211,12 @@ public class AccountSubscriptionGroup {
 			}
 		}
 
-		return manageURLsJSONObject.toString() + StringPool.SPACE;
+		return manageContactsURLJSONObject.toString();
 	}
 
 	private int _getMenuOrder() {
 		Map<String, Integer> menuOrders =
-			AccountSubscriptionGroupConstants.menuOrders;
+			AccountSubscriptionGroupConstants.MENU_ORDERS;
 
 		return menuOrders.getOrDefault(
 			name, AccountSubscriptionGroupConstants.ORDER_DEFAULT);
@@ -229,12 +224,12 @@ public class AccountSubscriptionGroup {
 
 	private int _getTabOrder() {
 		Map<String, Integer> tabOrders =
-			AccountSubscriptionGroupConstants.tabOrders;
+			AccountSubscriptionGroupConstants.TAB_ORDERS;
 
 		return tabOrders.getOrDefault(
 			name, AccountSubscriptionGroupConstants.ORDER_DEFAULT);
 	}
 
-	private final String _manageUrlLiferayPaas;
+	private final String _liferayPaasManageContactURL;
 
 }
